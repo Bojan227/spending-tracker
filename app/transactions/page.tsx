@@ -36,6 +36,9 @@ export default function EditUser() {
       />
 
       <AddTranstaction {...{ onClose, isOpen, currentCategory: "expense" }} />
+      <Text p={12} border="1px solid  #fca5a5" borderRadius={8} color="#fca5a5">
+        Press the '+' icon to add your first transaction
+      </Text>
     </Flex>
   );
 }
