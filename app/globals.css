@@ -95,6 +95,14 @@ a {
   text-decoration: none;
 }
 
+.date-picker {
+  background-color: #262626;
+  color: whitesmoke;
+  padding: 4px;
+  border: 1px solid whitesmoke;
+  border-radius: 4px;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
