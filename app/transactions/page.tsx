@@ -1,44 +1,41 @@
 "use client";
 
-import { Flex, Text, Input, Button, Box } from "@chakra-ui/react";
+import { Flex, Text, Input, Button, Box, Icon } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Select } from "@chakra-ui/react";
+import AddTranstaction from "../components/transactions/AddTransaction";
+import { FaPlus } from "react-icons/fa";
 
 export default function EditUser() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [date, setDate] = useState(new Date());
+  const onClose = () => {
+    setIsOpen(false);
+  };
 
-  console.log(date);
-
-  console.log(pathname.split("/")[3]);
   return (
     <Flex
       direction="column"
       align="center"
       width="100%"
       minH="100vh"
-      p={2}
+      padding="6rem"
       gap={4}
     >
-      <Text>Transaction Details</Text>
+      <Icon
+        onClick={() => setIsOpen(true)}
+        cursor="pointer"
+        as={FaPlus}
+        w={8}
+        h={8}
+        color="#f59e0b"
+      />
 
-      <Box>
-        <Text>Select Date</Text>
-        <DatePicker
-          className="date-picker"
-          selected={date}
-          onChange={(date) => setDate(date!)}
-        />
-      </Box>
-
-      <Input placeholder="Name" size="md" w="25%" />
-
-      <Button backgroundColor="#f59e0b" color="white">
-        Confirm Changes
-      </Button>
+      <AddTranstaction {...{ onClose, isOpen, currentCategory: "expense" }} />
     </Flex>
   );
 }
