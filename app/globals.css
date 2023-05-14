@@ -95,12 +95,20 @@ a {
   text-decoration: none;
 }
 
+.react-datepicker-wrapper {
+  display: flex !important;
+  align-items: center;
+  justify-items: center;
+  width: auto !important;
+}
+
 .date-picker {
   background-color: #262626;
   color: whitesmoke;
   padding: 4px;
   border: 1px solid whitesmoke;
   border-radius: 4px;
+  text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
