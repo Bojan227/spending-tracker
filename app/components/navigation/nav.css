@@ -1,0 +1,18 @@
+.main-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px;
+  background-color: #44403c;
+}
+
+li {
+  list-style-type: none;
+  color: #f59e0b;
+  cursor: pointer;
+}
+
+.active {
+  border-bottom: 1px solid #f59e0b;
+}
