@@ -5,11 +5,13 @@ export default function InfoBox({
   value,
   label,
   width,
+  flex,
 }: {
   color: string;
   value: number;
   label: string;
   width?: string;
+  flex?: number;
 }) {
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -17,7 +19,7 @@ export default function InfoBox({
   });
 
   return (
-    <Flex w={width} justify="space-between">
+    <Flex flex={flex} w={width} justify="space-between">
       <Text color="white">{label}</Text>
       <Text color={color}>{USDollar.format(value)}</Text>
     </Flex>

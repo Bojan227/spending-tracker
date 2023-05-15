@@ -26,24 +26,36 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus } from "react-icons/fa";
 import CategoryField from "../categories/CategoryField";
 
-export default function AddTranstaction() {
+export default function AddTranstaction({
+  transaction,
+  isSpendingsScreen,
+}: {
+  transaction: boolean;
+  isSpendingsScreen?: boolean;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const [amount, setAmount] = useState<number>(0);
   const [date, setDate] = useState(new Date());
   let [note, setNote] = React.useState("");
-  const [currentTransaction, setTransaction] = useState(true);
+  const [currentTransaction, setTransaction] = useState(transaction);
 
   return (
     <>
-      <Icon
-        onClick={onOpen}
-        cursor="pointer"
-        as={FaPlus}
-        w={8}
-        h={8}
-        color="#f59e0b"
-      />
+      {isSpendingsScreen ? (
+        <Text onClick={onOpen} cursor="pointer" px={2} border="1px solid white">
+          + {transaction ? "Expense" : "Income"}
+        </Text>
+      ) : (
+        <Icon
+          onClick={onOpen}
+          cursor="pointer"
+          as={FaPlus}
+          w={8}
+          h={8}
+          color="#f59e0b"
+        />
+      )}
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent backgroundColor="#44403c" color="white">
@@ -89,7 +101,7 @@ export default function AddTranstaction() {
                 variant="flushed"
                 placeholder="Not Selected"
                 size="md"
-                color="white"
+                color="black"
               >
                 <option value="option1">Fuel</option>
                 <option value="option2">General</option>
@@ -106,7 +118,7 @@ export default function AddTranstaction() {
             >
               <Text>Amount</Text>
               <Input
-                color="white"
+                color="black"
                 value={amount}
                 onChange={(e) => setAmount(parseInt(e.target.value))}
                 placeholder="Name"
