@@ -30,7 +30,7 @@ export default function AddUserModal() {
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent backgroundColor="#44403c" color="white">
           <ModalHeader>Add User</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -49,7 +49,12 @@ export default function AddUserModal() {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button colorScheme="blue" mr={3}>
+              Save
+            </Button>
+            <Button colorScheme="orange" onClick={onClose}>
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
