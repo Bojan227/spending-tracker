@@ -14,15 +14,19 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
+import { useAddUser } from "@/app/hooks/useAddUser";
 
 export default function AddUserModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userName, setUsername] = useState("");
-  const [color, setColor] = useState("");
+  const [color, setColor] = useState("#000000");
+
+  const { addUser, isLoading, error, setError } = useAddUser();
 
   return (
     <>
@@ -45,17 +49,41 @@ export default function AddUserModal() {
 
             <FormControl mt={4}>
               <FormLabel>Color</FormLabel>
-              <HexColorPicker onChange={(color) => setColor(color)} />
+              <HexColorPicker
+                defaultValue="#000000"
+                onChange={(color) => setColor(color)}
+              />
             </FormControl>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
-              Save
+          <ModalFooter alignSelf="center">
+            <Button
+              onClick={() => {
+                addUser(userName, color);
+                setUsername("");
+                setColor("#000000");
+              }}
+              colorScheme="blue"
+              mr={3}
+            >
+              {isLoading ? "Loading..." : "Save"}
             </Button>
-            <Button colorScheme="orange" onClick={onClose}>
+            <Button
+              colorScheme="orange"
+              onClick={() => {
+                onClose();
+                setError("");
+                setUsername("");
+                setColor("#000000");
+              }}
+            >
               Cancel
             </Button>
           </ModalFooter>
+          {error && (
+            <Text textAlign="center" py={2}>
+              {error}
+            </Text>
+          )}
         </ModalContent>
       </Modal>
     </>
