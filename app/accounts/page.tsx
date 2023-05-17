@@ -24,12 +24,8 @@ export default async function Page() {
     <main className={styles.main}>
       <AddUserModal />
       <div className={styles.cards}>
-        {users.map((user) => (
-          <AccountCard
-            key={user.id}
-            userName={user.userName}
-            color={user.color}
-          />
+        {users.map(({ id, userName, color }) => (
+          <AccountCard key={id} {...{ id, userName, color }} />
         ))}
       </div>
       <p className={styles.info}>

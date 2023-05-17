@@ -1,13 +1,5 @@
 import { db } from "@/app/firebase";
-import {
-  doc,
-  setDoc,
-  addDoc,
-  collection,
-  getDocs,
-  where,
-  query,
-} from "firebase/firestore";
+import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
 import { useState } from "react";
 
 export const useAddUser = () => {
@@ -16,7 +8,6 @@ export const useAddUser = () => {
 
   const addUser = async (userName: string, color: string) => {
     setIsLoading(true);
-
     try {
       if (!userName || !color) throw new Error("All Fields must be filled");
       const querySnapshot = await getDocs(
