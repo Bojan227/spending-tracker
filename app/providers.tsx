@@ -2,11 +2,10 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./constants/queryClient";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient();
-
   return (
     <CacheProvider>
       <QueryClientProvider client={queryClient}>
