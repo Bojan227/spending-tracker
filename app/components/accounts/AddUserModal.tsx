@@ -19,14 +19,14 @@ import {
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
-import { useAddUser } from "@/app/hooks/useAddUser";
+import useAddUser from "@/app/hooks/useAddUser";
 
 export default function AddUserModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userName, setUsername] = useState("");
   const [color, setColor] = useState("#000000");
 
-  const { addUser, isLoading, error, setError } = useAddUser();
+  const { addMutation } = useAddUser();
 
   return (
     <>
@@ -58,20 +58,19 @@ export default function AddUserModal() {
           <ModalFooter alignSelf="center">
             <Button
               onClick={() => {
-                addUser(userName, color);
+                addMutation.mutate({ userName, color });
                 setUsername("");
                 setColor("#000000");
               }}
               colorScheme="blue"
               mr={3}
             >
-              {isLoading ? "Loading..." : "Save"}
+              {addMutation.isLoading ? "Loading..." : "Save"}
             </Button>
             <Button
               colorScheme="orange"
               onClick={() => {
                 onClose();
-                setError("");
                 setUsername("");
                 setColor("#000000");
               }}
@@ -79,9 +78,9 @@ export default function AddUserModal() {
               Cancel
             </Button>
           </ModalFooter>
-          {error && (
+          {addMutation.isError && (
             <Text textAlign="center" py={2}>
-              {error}
+              {addMutation.error instanceof Error && addMutation.error.message}
             </Text>
           )}
         </ModalContent>

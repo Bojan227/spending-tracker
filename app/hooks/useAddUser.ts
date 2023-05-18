@@ -1,35 +1,34 @@
 import { db } from "@/app/firebase";
 import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
-import { useState } from "react";
 
-export const useAddUser = () => {
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "../constants/queryClient";
 
-  const addUser = async (userName: string, color: string) => {
-    setIsLoading(true);
-    try {
-      if (!userName || !color) throw new Error("All Fields must be filled");
-      const querySnapshot = await getDocs(
-        query(collection(db, "users"), where("userName", "==", userName))
-      );
+const addUser = async (newUser: { userName: string; color: string }) => {
+  if (!newUser.userName || !newUser.color)
+    throw new Error("All Fields must be filled");
 
-      if (!querySnapshot.empty) {
-        throw new Error("Username already exists");
-      }
+  const querySnapshot = await getDocs(
+    query(collection(db, "users"), where("userName", "==", newUser.userName))
+  );
 
-      await addDoc(collection(db, "users"), {
-        userName,
-        color,
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  if (!querySnapshot.empty) {
+    throw new Error("Username already exists");
+  }
 
-  return { isLoading, error, addUser, setError };
+  await addDoc(collection(db, "users"), newUser);
 };
+
+export default function useAddUser() {
+  const mutation = useMutation({
+    mutationFn: async (newUser: { userName: string; color: string }) => {
+      return addUser(newUser);
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  return { addMutation: mutation };
+}
