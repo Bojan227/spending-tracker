@@ -1,8 +1,8 @@
-import { db } from "@/app/firebase";
+import { db } from "@/firebase";
 import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
 
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "../constants/queryClient";
+import { queryClient } from "../app/constants/queryClient";
 
 const addUser = async (newUser: { userName: string; color: string }) => {
   if (!newUser.userName || !newUser.color)

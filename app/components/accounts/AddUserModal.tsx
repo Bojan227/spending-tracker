@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
-import useAddUser from "@/app/hooks/useAddUser";
+import useAddUser from "@/hooks/useAddUser";
 
 export default function AddUserModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();

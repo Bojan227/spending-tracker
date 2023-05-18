@@ -1,6 +1,6 @@
-import { db } from "@/app/firebase";
+import { db } from "@/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { queryClient } from "../constants/queryClient";
+import { queryClient } from "../app/constants/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 

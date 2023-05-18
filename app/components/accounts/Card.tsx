@@ -1,29 +1,26 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  Stack,
-  Heading,
-  Text,
-  CardFooter,
-  Button,
-  Icon,
-} from "@chakra-ui/react";
+import { Card, CardBody, Stack, Text, Icon } from "@chakra-ui/react";
 
 import Link from "next/link";
 
 import { FaUser } from "react-icons/fa";
 
 export default function AccountCard({
+  id,
   userName,
   color,
 }: {
   userName: string;
   color: string;
+  id: string;
 }) {
   return (
-    <Link href={`/accounts/edit/${1}`} style={{ width: "50%" }}>
+    <Link
+      prefetch={false}
+      href={`/accounts/edit/${id}`}
+      style={{ width: "50%" }}
+    >
       <Card
         align="center"
         direction={{ base: "column", sm: "row" }}

@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { Spinner } from "@chakra-ui/react";
-import useEditUserInfo from "@/app/hooks/editUser";
-import useGetUserById from "@/app/hooks/getUserById";
+import useEditUserInfo from "@/hooks/editUser";
+import useGetUserById from "@/hooks/getUserById";
 
 export default function EditUser() {
   const pathname = usePathname();

@@ -14,6 +14,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+import { db } from "@/firebase";
+import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
@@ -27,6 +30,13 @@ export default function AddCategory({
   const initialRef = React.useRef(null);
   const [categoryName, setCategoryName] = useState("");
   const [chartColor, setChartColor] = useState("");
+
+  const addCategory = async () => {
+    await addDoc(collection(db, "categories"), {
+      categoryName,
+      chartColor,
+    });
+  };
 
   return (
     <>
@@ -60,7 +70,7 @@ export default function AddCategory({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button onClick={() => addCategory()} colorScheme="blue" mr={3}>
               Save
             </Button>
             <Button colorScheme="orange" onClick={onClose}>
