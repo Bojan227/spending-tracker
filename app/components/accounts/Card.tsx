@@ -1,10 +1,10 @@
 "use client";
 
 import { Card, CardBody, Stack, Text, Icon } from "@chakra-ui/react";
-
+import { useUserStore } from "@/store";
 import Link from "next/link";
-
-import { FaUser } from "react-icons/fa";
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
+import { FaUser, FaTrash } from "react-icons/fa";
 
 export default function AccountCard({
   id,
@@ -15,6 +15,8 @@ export default function AccountCard({
   color: string;
   id: string;
 }) {
+  const { currentUser, switchUser } = useUserStore();
+
   return (
     <Link
       prefetch={false}
@@ -32,10 +34,24 @@ export default function AccountCard({
         cursor="pointer"
       >
         <Icon as={FaUser} w={6} h={6} color={color} />
-        <Stack>
+        <Stack flex={1}>
           <CardBody>
             <Text py="2">{userName}</Text>
           </CardBody>
+        </Stack>
+        <Stack
+          onClick={(e) => e.stopPropagation()}
+          cursor="pointer"
+          align="center"
+          gap="25px"
+        >
+          <Checkbox
+            onChange={() => switchUser({ id, userName, color })}
+            size="md"
+            colorScheme="green"
+            isChecked={currentUser?.id === id}
+          ></Checkbox>
+          <Icon as={FaTrash} w={6} h={6} color="red.400" />
         </Stack>
       </Card>
     </Link>
