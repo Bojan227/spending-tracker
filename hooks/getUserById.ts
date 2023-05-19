@@ -1,4 +1,4 @@
-import { db } from "@/firebase";
+import { db } from "@/app/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { getDoc, doc } from "firebase/firestore";
 
