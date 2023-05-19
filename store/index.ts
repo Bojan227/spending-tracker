@@ -3,7 +3,7 @@ import { UserType } from "@/types";
 
 type UserStore = {
   currentUser: UserType | undefined;
-  switchUser: (user: UserType) => void;
+  switchUser: (user: UserType | undefined) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
