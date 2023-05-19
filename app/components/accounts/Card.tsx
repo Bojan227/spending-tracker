@@ -3,8 +3,9 @@
 import { Card, CardBody, Stack, Text, Icon } from "@chakra-ui/react";
 import { useUserStore } from "@/store";
 import Link from "next/link";
-import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
+import { Checkbox } from "@chakra-ui/react";
 import { FaUser, FaTrash } from "react-icons/fa";
+import useDeleteUser from "@/hooks/useDeleteUser";
 
 export default function AccountCard({
   id,
@@ -16,6 +17,7 @@ export default function AccountCard({
   id: string;
 }) {
   const { currentUser, switchUser } = useUserStore();
+  const { deleteUserMutation } = useDeleteUser();
 
   return (
     <Link
@@ -51,7 +53,17 @@ export default function AccountCard({
             colorScheme="green"
             isChecked={currentUser?.id === id}
           ></Checkbox>
-          <Icon as={FaTrash} w={6} h={6} color="red.400" />
+          <Icon
+            as={FaTrash}
+            onClick={(e) => {
+              e.preventDefault();
+              deleteUserMutation.mutate(id);
+              currentUser?.id === id && switchUser(undefined);
+            }}
+            w={6}
+            h={6}
+            color="red.400"
+          />
         </Stack>
       </Card>
     </Link>
