@@ -3,10 +3,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import { queryClient } from "../app/constants/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { UserType } from "@/types";
 
 export const editUserById = async (
   userId: string,
-  updatedData: { userName: string; color: string }
+  updatedData: Omit<UserType, "id">
 ) => {
   const userRef = doc(db, "users", userId);
 
@@ -23,12 +24,8 @@ export default function useEditUserInfo() {
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: async (user: {
-      id: string;
-      userName: string;
-      color: string;
-    }) => {
-      return editUserById(user.id, {
+    mutationFn: async (user: UserType) => {
+      return editUserById(user.id!, {
         userName: user.userName,
         color: user.color,
       });

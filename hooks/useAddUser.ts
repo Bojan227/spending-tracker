@@ -3,8 +3,9 @@ import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
 import { useToast } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../app/constants/queryClient";
+import { UserType } from "@/types";
 
-const addUser = async (newUser: { userName: string; color: string }) => {
+const addUser = async (newUser: UserType) => {
   if (!newUser.userName || !newUser.color)
     throw new Error("All Fields must be filled");
 
@@ -23,7 +24,7 @@ export default function useAddUser() {
   const toast = useToast();
 
   const mutation = useMutation({
-    mutationFn: async (newUser: { userName: string; color: string }) => {
+    mutationFn: async (newUser: UserType) => {
       return addUser(newUser);
     },
     onSuccess: () => {

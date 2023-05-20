@@ -1,4 +1,5 @@
 import { db } from "@/app/firebase";
+import { UserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -12,7 +13,7 @@ async function getUsers() {
       ...doc.data(),
     };
   });
-  return users as { id: string; userName: string; color: string }[];
+  return users as UserType[];
 }
 
 export default function useGetUsers() {

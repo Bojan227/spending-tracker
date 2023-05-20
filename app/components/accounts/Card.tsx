@@ -6,16 +6,9 @@ import Link from "next/link";
 import { Checkbox } from "@chakra-ui/react";
 import { FaUser, FaTrash } from "react-icons/fa";
 import useDeleteUser from "@/hooks/useDeleteUser";
+import { UserType } from "@/types";
 
-export default function AccountCard({
-  id,
-  userName,
-  color,
-}: {
-  userName: string;
-  color: string;
-  id: string;
-}) {
+export default function AccountCard({ id, userName, color }: UserType) {
   const { currentUser, switchUser } = useUserStore();
   const { deleteUserMutation } = useDeleteUser();
 
@@ -57,7 +50,7 @@ export default function AccountCard({
             as={FaTrash}
             onClick={(e) => {
               e.preventDefault();
-              deleteUserMutation.mutate(id);
+              deleteUserMutation.mutate(id!);
               currentUser?.id === id && switchUser(undefined);
             }}
             w={6}
