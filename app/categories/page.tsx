@@ -1,14 +1,16 @@
 "use client";
-import { Container, Flex, Text } from "@chakra-ui/react";
+import { Container, Flex, Spinner, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import CategoryField from "../components/categories/CategoryField";
 import CategoryCard from "../components/categories/Card";
 
 import { FaUser } from "react-icons/fa";
 import AddCategory from "../components/categories/AddCategoryModal";
+import useGetCategories from "@/hooks/useGetCategories";
 
 export default function Categories() {
   const [currentTransaction, setTransaction] = useState(true);
+  const { isLoading, isError, error, data: categories } = useGetCategories();
 
   return (
     <Container minH="100vh">
@@ -28,7 +30,19 @@ export default function Categories() {
           }}
         />
       </Flex>
-      <CategoryCard label="Fuel" chartColor="blue" Icon={FaUser} />
+      {isLoading ? (
+        <Spinner size="md" />
+      ) : (
+        categories?.map(({ id, chartColor, name, type, userId }) => (
+          <CategoryCard
+            key={id}
+            label={name}
+            chartColor={chartColor}
+            Icon={FaUser}
+          />
+        ))
+      )}
+      {isError && <Text>{error instanceof Error && error.message}</Text>}
     </Container>
   );
 }
