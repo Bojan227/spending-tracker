@@ -5,6 +5,7 @@ export type UserType = {
 };
 
 export type Category = {
+  id: string;
   name: string;
   chartColor: string;
   userId: string;

@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../app/constants/queryClient";
 import { Category } from "@/types";
 
-const addCategory = async (newCategory: Category) => {
+const addCategory = async (newCategory: Omit<Category, "id">) => {
   console.log(newCategory);
 
   if (
@@ -31,7 +31,7 @@ export default function useAddcategory() {
   const toast = useToast();
 
   const mutation = useMutation({
-    mutationFn: async (newCategory: Category) => {
+    mutationFn: async (newCategory: Omit<Category, "id">) => {
       return addCategory(newCategory);
     },
     onSuccess: () => {
