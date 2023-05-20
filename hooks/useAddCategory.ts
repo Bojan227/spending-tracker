@@ -6,6 +6,8 @@ import { queryClient } from "../app/constants/queryClient";
 import { Category } from "@/types";
 
 const addCategory = async (newCategory: Category) => {
+  console.log(newCategory);
+
   if (
     !newCategory.name ||
     !newCategory.chartColor ||
@@ -25,7 +27,7 @@ const addCategory = async (newCategory: Category) => {
   await addDoc(collection(db, "categories"), newCategory);
 };
 
-export default function useAddUser() {
+export default function useAddcategory() {
   const toast = useToast();
 
   const mutation = useMutation({

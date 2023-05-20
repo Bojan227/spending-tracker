@@ -14,8 +14,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { db } from "@/firebase";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import useAddcategory from "@/hooks/useAddCategory";
+import { useUserStore } from "@/store";
 
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
@@ -31,12 +31,8 @@ export default function AddCategory({
   const [categoryName, setCategoryName] = useState("");
   const [chartColor, setChartColor] = useState("");
 
-  const addCategory = async () => {
-    await addDoc(collection(db, "categories"), {
-      categoryName,
-      chartColor,
-    });
-  };
+  const { addMutation } = useAddcategory();
+  const { currentUser } = useUserStore();
 
   return (
     <>
@@ -70,13 +66,27 @@ export default function AddCategory({
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={() => addCategory()} colorScheme="blue" mr={3}>
+            <Button
+              onClick={() =>
+                addMutation.mutate({
+                  name: categoryName,
+                  chartColor,
+                  userId: currentUser?.id!,
+                  type: currentTransaction,
+                })
+              }
+              colorScheme="blue"
+              mr={3}
+            >
               Save
             </Button>
             <Button colorScheme="orange" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
+          {addMutation.isError &&
+            addMutation.error instanceof Error &&
+            addMutation.error.message}
         </ModalContent>
       </Modal>
     </>
