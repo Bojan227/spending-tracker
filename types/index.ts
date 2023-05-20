@@ -3,3 +3,10 @@ export type UserType = {
   userName: string;
   color: string;
 };
+
+export type Category = {
+  name: string;
+  chartColor: string;
+  userId: string;
+  type: string;
+};
