@@ -19,13 +19,15 @@ export default function CategoryCard({
   label,
   chartColor,
   Icon,
+  categoryId,
 }: {
   label: string;
   chartColor: string;
+  categoryId: string;
   Icon: IconType;
 }) {
   return (
-    <Link href={`/categories/edit/${1}`} style={{ width: "50%" }}>
+    <Link href={`/categories/edit/${categoryId}`} style={{ width: "50%" }}>
       <Card
         align="center"
         direction={{ base: "column", sm: "row" }}

@@ -36,6 +36,7 @@ export default function Categories() {
         categories?.map(({ id, chartColor, name, type, userId }) => (
           <CategoryCard
             key={id}
+            categoryId={id}
             label={name}
             chartColor={chartColor}
             Icon={FaUser}
