@@ -27,7 +27,7 @@ const addCategory = async (newCategory: Omit<Category, "id">) => {
   await addDoc(collection(db, "categories"), newCategory);
 };
 
-export default function useAddcategory() {
+export default function useAddCategory() {
   const toast = useToast();
 
   const mutation = useMutation({

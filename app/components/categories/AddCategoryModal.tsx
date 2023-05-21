@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import useAddcategory from "@/hooks/useAddCategory";
+import useAddCategory from "@/hooks/useAddCategory";
 import { useUserStore } from "@/store";
 
 import React, { useState } from "react";
@@ -31,7 +31,7 @@ export default function AddCategory({
   const [categoryName, setCategoryName] = useState("");
   const [chartColor, setChartColor] = useState("");
 
-  const { addMutation } = useAddcategory();
+  const { addMutation } = useAddCategory();
   const { currentUser } = useUserStore();
 
   return (
