@@ -10,7 +10,12 @@ import useGetCategories from "@/hooks/useGetCategories";
 
 export default function Categories() {
   const [currentTransaction, setTransaction] = useState(true);
-  const { isLoading, isError, error, data: categories } = useGetCategories();
+  const {
+    isLoading,
+    isError,
+    error,
+    data: categories,
+  } = useGetCategories(currentTransaction ? "expense" : "income");
 
   return (
     <Container minH="100vh">

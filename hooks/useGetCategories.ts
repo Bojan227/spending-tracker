@@ -3,23 +3,29 @@ import { Category } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 
-async function getCategories() {
+async function getCategories(transactionType: string) {
   const collectionRef = collection(db, "categories");
   const querySnapshot = await getDocs(collectionRef);
 
-  const categories = querySnapshot.docs.map((doc) => {
-    return {
+  const categories: Category[] = [];
+  querySnapshot.forEach((doc) => {
+    const category = {
       id: doc.id,
-      ...doc.data(),
+      ...(doc.data() as Omit<Category, "id">),
     };
+    if (category.type === transactionType) {
+      categories.push(category);
+    }
   });
-  return categories as Category[];
+
+  return categories;
 }
 
-export default function useGetCategories() {
+export default function useGetCategories(transactionType: string) {
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => getCategories(),
+    queryKey: ["categories", transactionType],
+    queryFn: async () => getCategories(transactionType),
+    enabled: Boolean(transactionType),
   });
 
   return { isLoading, isError, error, data };
