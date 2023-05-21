@@ -2,14 +2,27 @@
 
 import { Flex, Text, Input, Button } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
+import useGetCategoryById from "@/hooks/useGetCategoryById";
+import useEditCategory from "@/hooks/useEditCategory";
 
 export default function EditCategory() {
   const pathname = usePathname();
-  const [color, setColor] = useState("#aabbcc");
 
-  console.log(pathname.split("/")[3]);
+  const { editMutation } = useEditCategory();
+  const { isError, data, error } = useGetCategoryById(pathname.split("/")[3]);
+
+  const [chartColor, setChartColor] = useState("#aabbcc");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (data) {
+      setChartColor(data.chartColor);
+      setName(data.name);
+    }
+  }, [data?.chartColor]);
+
   return (
     <Flex
       direction="column"
@@ -21,14 +34,30 @@ export default function EditCategory() {
       color="whiteAlpha.700"
     >
       <Text>Category Details</Text>
-      <Input placeholder="Category Name" size="md" w="25%" />
+      <Input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Category Name"
+        size="md"
+        w="25%"
+      />
       <Flex direction="column" align="center" justify="space-between" gap={4}>
         <Text>Chart Color</Text>
-        <HexColorPicker color={color} onChange={setColor} />
+        <HexColorPicker color={chartColor} onChange={setChartColor} />
       </Flex>
-      <Button backgroundColor="#f59e0b" color="white">
-        Confirm Changes
+      <Button
+        onClick={() =>
+          editMutation.mutate({ id: pathname.split("/")[3], name, chartColor })
+        }
+        backgroundColor="#f59e0b"
+        color="white"
+      >
+        {editMutation.isLoading ? "Loading..." : "Confirm Changes"}
       </Button>
+      {isError && error instanceof Error && <Text>{error.message}</Text>}
+      {editMutation.isError && editMutation.error instanceof Error && (
+        <Text>{editMutation.error.message}</Text>
+      )}
     </Flex>
   );
 }
