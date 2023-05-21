@@ -44,7 +44,6 @@ export default function Categories() {
             categoryId={id}
             label={name}
             chartColor={chartColor}
-            Icon={FaUser}
           />
         ))
       )}

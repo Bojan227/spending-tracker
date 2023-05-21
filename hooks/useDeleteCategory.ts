@@ -43,5 +43,5 @@ export default function useDeleteCategory() {
     },
   });
 
-  return { deleteUserMutation: mutation };
+  return { deleteMutation: mutation };
 }

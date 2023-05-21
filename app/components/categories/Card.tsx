@@ -11,21 +11,24 @@ import {
   Icon,
 } from "@chakra-ui/react";
 
+import useDeleteCategory from "@/hooks/useDeleteCategory";
 import Link from "next/link";
 
 import { IconType } from "react-icons/lib";
+import { FaTrash } from "react-icons/fa";
 
 export default function CategoryCard({
   label,
   chartColor,
-  Icon,
+
   categoryId,
 }: {
   label: string;
   chartColor: string;
   categoryId: string;
-  Icon: IconType;
 }) {
+  const { deleteMutation } = useDeleteCategory();
+
   return (
     <Link href={`/categories/edit/${categoryId}`} style={{ width: "50%" }}>
       <Card
@@ -38,12 +41,21 @@ export default function CategoryCard({
         color="#f1f5f9"
         cursor="pointer"
       >
-        <Icon />
-        <Stack>
+        <Stack flex="1">
           <CardBody>
             <Text py="2">{label}</Text>
           </CardBody>
         </Stack>
+        <Icon
+          as={FaTrash}
+          onClick={(e) => {
+            e.preventDefault();
+            deleteMutation.mutate(categoryId);
+          }}
+          w={6}
+          h={6}
+          color="red.400"
+        />
       </Card>
     </Link>
   );
