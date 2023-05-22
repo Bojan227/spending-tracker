@@ -1,11 +1,17 @@
 import { db } from "@/app/firebase";
 import { Category } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-async function getCategories(transactionType: string) {
+async function getCategories(userId: string, transactionType: string) {
   const collectionRef = collection(db, "categories");
-  const querySnapshot = await getDocs(collectionRef);
+  const querySnapshot = await getDocs(
+    query(
+      collectionRef,
+      where("userId", "==", userId),
+      where("type", "==", transactionType)
+    )
+  );
 
   const categories: Category[] = [];
   querySnapshot.forEach((doc) => {
@@ -13,19 +19,20 @@ async function getCategories(transactionType: string) {
       id: doc.id,
       ...(doc.data() as Omit<Category, "id">),
     };
-    if (category.type === transactionType) {
-      categories.push(category);
-    }
+    categories.push(category);
   });
 
   return categories;
 }
 
-export default function useGetCategories(transactionType: string) {
+export default function useGetCategories(
+  userId: string,
+  transactionType: string
+) {
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["categories", transactionType],
-    queryFn: async () => getCategories(transactionType),
-    enabled: Boolean(transactionType),
+    queryKey: ["categories", transactionType, userId],
+    queryFn: async () => getCategories(userId, transactionType),
+    enabled: Boolean(transactionType) || Boolean(userId),
   });
 
   return { isLoading, isError, error, data };

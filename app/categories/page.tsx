@@ -7,15 +7,21 @@ import CategoryCard from "../components/categories/Card";
 import { FaUser } from "react-icons/fa";
 import AddCategory from "../components/categories/AddCategoryModal";
 import useGetCategories from "@/hooks/useGetCategories";
+import { useUserStore } from "@/store";
 
 export default function Categories() {
   const [currentTransaction, setTransaction] = useState(true);
+  const { currentUser } = useUserStore();
+
   const {
     isLoading,
     isError,
     error,
     data: categories,
-  } = useGetCategories(currentTransaction ? "expense" : "income");
+  } = useGetCategories(
+    currentUser?.id!,
+    currentTransaction ? "expense" : "income"
+  );
 
   return (
     <Container minH="100vh">
