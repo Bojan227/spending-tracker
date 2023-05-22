@@ -21,3 +21,5 @@ export type Transaction = {
   note: string;
   transactionType: string;
 };
+
+export type TransactionResponse = Transaction & { date: { seconds: number } };
