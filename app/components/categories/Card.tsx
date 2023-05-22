@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  Stack,
-  Heading,
-  Text,
-  CardFooter,
-  Button,
-  Icon,
-} from "@chakra-ui/react";
+import { Card, CardBody, Stack, Text, Icon } from "@chakra-ui/react";
 
 import useDeleteCategory from "@/hooks/useDeleteCategory";
 import Link from "next/link";
@@ -20,7 +11,6 @@ import { FaTrash } from "react-icons/fa";
 export default function CategoryCard({
   label,
   chartColor,
-
   categoryId,
 }: {
   label: string;

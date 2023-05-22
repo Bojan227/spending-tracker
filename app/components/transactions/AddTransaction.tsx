@@ -1,9 +1,6 @@
 import {
-  Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   Icon,
   Input,
   Modal,
@@ -25,9 +22,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus } from "react-icons/fa";
 import CategoryField from "../categories/CategoryField";
+
 import useGetUsers from "@/hooks/useGetUsers";
 import { useUserStore } from "@/store";
 import useGetCategories from "@/hooks/useGetCategories";
+import useAddTransaction from "@/hooks/useAddTransaction";
 
 export default function AddTranstaction({
   transaction,
@@ -40,8 +39,12 @@ export default function AddTranstaction({
   const initialRef = React.useRef(null);
   const [amount, setAmount] = useState<string>("");
   const [date, setDate] = useState(new Date());
-  let [note, setNote] = React.useState("");
+  let [note, setNote] = useState("");
   const [currentTransaction, setTransaction] = useState(transaction);
+  const [categoryId, setCategoryId] = useState("");
+  const [accountId, setAccountId] = useState("");
+
+  console.log(categoryId);
 
   const { isLoading, isError, error, data: users } = useGetUsers();
   const { currentUser } = useUserStore();
@@ -55,6 +58,8 @@ export default function AddTranstaction({
     currentUser?.id!,
     currentTransaction ? "expense" : "income"
   );
+
+  const { addMutation } = useAddTransaction();
 
   return (
     <>
@@ -118,9 +123,11 @@ export default function AddTranstaction({
                 placeholder="Not Selected"
                 size="md"
                 color="black"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
               >
                 {categories?.map((category) => (
-                  <option key={category.id} value={category.name}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}
@@ -154,9 +161,17 @@ export default function AddTranstaction({
               gap={4}
             >
               <Text>Account</Text>
-              <Select color="black" width="50%" variant="flushed" size="md">
+              <Select
+                value={accountId}
+                onChange={(e) => setAccountId(e.target.value)}
+                color="black"
+                width="50%"
+                variant="flushed"
+                placeholder="Not Selected"
+                size="md"
+              >
                 {users?.map(({ id, userName }) => (
-                  <option key={id} value={userName}>
+                  <option key={id} value={id}>
                     {userName}
                   </option>
                 ))}
@@ -173,7 +188,20 @@ export default function AddTranstaction({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button
+              onClick={() =>
+                addMutation.mutate({
+                  categoryId,
+                  accountId,
+                  note,
+                  date,
+                  amount,
+                  transactionType: currentTransaction ? "expense" : "income",
+                })
+              }
+              colorScheme="blue"
+              mr={3}
+            >
               Save
             </Button>
             <Button colorScheme="orange" onClick={onClose}>
