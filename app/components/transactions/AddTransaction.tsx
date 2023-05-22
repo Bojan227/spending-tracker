@@ -27,6 +27,7 @@ import useGetUsers from "@/hooks/useGetUsers";
 import { useUserStore } from "@/store";
 import useGetCategories from "@/hooks/useGetCategories";
 import useAddTransaction from "@/hooks/useAddTransaction";
+import UsersSelect from "./Users";
 
 export default function AddTranstaction({
   transaction,
@@ -43,8 +44,6 @@ export default function AddTranstaction({
   const [currentTransaction, setTransaction] = useState(transaction);
   const [categoryId, setCategoryId] = useState("");
   const [accountId, setAccountId] = useState("");
-
-  console.log(categoryId);
 
   const { isLoading, isError, error, data: users } = useGetUsers();
   const { currentUser } = useUserStore();
@@ -153,30 +152,7 @@ export default function AddTranstaction({
               />
             </Flex>
 
-            <Flex
-              width="100%"
-              mt={2}
-              align="center"
-              justify="space-around"
-              gap={4}
-            >
-              <Text>Account</Text>
-              <Select
-                value={accountId}
-                onChange={(e) => setAccountId(e.target.value)}
-                color="black"
-                width="50%"
-                variant="flushed"
-                placeholder="Not Selected"
-                size="md"
-              >
-                {users?.map(({ id, userName }) => (
-                  <option key={id} value={id}>
-                    {userName}
-                  </option>
-                ))}
-              </Select>
-            </Flex>
+            <UsersSelect {...{ accountId, setAccountId }} />
 
             <Textarea
               mt={2}

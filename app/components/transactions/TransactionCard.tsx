@@ -28,7 +28,11 @@ export default function TransactionCard({
   Icon: IconType;
 }) {
   return (
-    <Link href={`/transactions/edit/${1}`} style={{ width: "65%" }}>
+    <Link
+      prefetch={false}
+      href={`/transactions/edit/${1}`}
+      style={{ width: "65%" }}
+    >
       <Card
         align="center"
         direction={{ base: "column", sm: "row" }}
