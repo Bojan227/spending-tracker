@@ -1,36 +1,37 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  Stack,
-  Heading,
-  Text,
-  CardFooter,
-  Button,
-  Icon,
-  Flex,
-} from "@chakra-ui/react";
+import format from "date-fns/format";
+import { Card, CardBody, Text, Flex } from "@chakra-ui/react";
 
 import Link from "next/link";
 
 import { IconType } from "react-icons/lib";
+import useGetCategoryById from "@/hooks/useGetCategoryById";
 
 export default function TransactionCard({
-  categoryName,
+  categoryId,
   date,
   amount,
   Icon,
+  transactionId,
 }: {
-  categoryName: string;
+  categoryId: string;
   amount: number;
-  date: string;
+  date: number;
+  transactionId: string;
   Icon: IconType;
 }) {
+  const {
+    isLoading,
+    isError,
+    error,
+    data: category,
+  } = useGetCategoryById(categoryId);
+
   return (
     <Link
       prefetch={false}
-      href={`/transactions/edit/${1}`}
+      href={`/transactions/edit/${transactionId}`}
       style={{ width: "65%" }}
     >
       <Card
@@ -46,8 +47,8 @@ export default function TransactionCard({
         <Icon />
         <Flex direction="column" flex={1}>
           <CardBody>
-            <Text py="2">{categoryName}</Text>
-            <Text py="2">{date}</Text>
+            {category && <Text py="2">{category.name}</Text>}
+            <Text py="2">{format(new Date(date * 1000), "EEEE/do-MMM")}</Text>
           </CardBody>
         </Flex>
         <Text fontSize="1.5rem" color="red">
