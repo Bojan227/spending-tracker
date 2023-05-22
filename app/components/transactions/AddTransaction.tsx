@@ -25,6 +25,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus } from "react-icons/fa";
 import CategoryField from "../categories/CategoryField";
+import useGetUsers from "@/hooks/useGetUsers";
+import { useUserStore } from "@/store";
+import useGetCategories from "@/hooks/useGetCategories";
 
 export default function AddTranstaction({
   transaction,
@@ -35,10 +38,23 @@ export default function AddTranstaction({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("");
   const [date, setDate] = useState(new Date());
   let [note, setNote] = React.useState("");
   const [currentTransaction, setTransaction] = useState(transaction);
+
+  const { isLoading, isError, error, data: users } = useGetUsers();
+  const { currentUser } = useUserStore();
+
+  const {
+    isLoading: isLoadingCategories,
+    isError: isErrorCategories,
+    error: errorCategories,
+    data: categories,
+  } = useGetCategories(
+    currentUser?.id!,
+    currentTransaction ? "expense" : "income"
+  );
 
   return (
     <>
@@ -103,9 +119,11 @@ export default function AddTranstaction({
                 size="md"
                 color="black"
               >
-                <option value="option1">Fuel</option>
-                <option value="option2">General</option>
-                <option value="option3">Kids</option>
+                {categories?.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </Select>
             </Flex>
 
@@ -120,10 +138,11 @@ export default function AddTranstaction({
               <Input
                 color="black"
                 value={amount}
-                onChange={(e) => setAmount(parseInt(e.target.value))}
-                placeholder="Name"
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Amount"
                 size="sm"
                 w="50%"
+                type="number"
               />
             </Flex>
 
@@ -135,15 +154,12 @@ export default function AddTranstaction({
               gap={4}
             >
               <Text>Account</Text>
-              <Select
-                color="white"
-                width="50%"
-                variant="flushed"
-                placeholder="Bojan"
-                size="md"
-              >
-                <option value="option1">Bojan</option>
-                <option value="option2">Personal</option>
+              <Select color="black" width="50%" variant="flushed" size="md">
+                {users?.map(({ id, userName }) => (
+                  <option key={id} value={userName}>
+                    {userName}
+                  </option>
+                ))}
               </Select>
             </Flex>
 
