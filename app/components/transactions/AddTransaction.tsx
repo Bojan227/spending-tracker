@@ -23,11 +23,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus } from "react-icons/fa";
 import CategoryField from "../categories/CategoryField";
 
-import useGetUsers from "@/hooks/useGetUsers";
-import { useUserStore } from "@/store";
-import useGetCategories from "@/hooks/useGetCategories";
 import useAddTransaction from "@/hooks/useAddTransaction";
+
 import UsersSelect from "./Users";
+import CategoriesSelect from "./CategoriesSelect";
 
 export default function AddTranstaction({
   transaction,
@@ -38,25 +37,13 @@ export default function AddTranstaction({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
+
   const [amount, setAmount] = useState<string>("");
   const [date, setDate] = useState(new Date());
-  let [note, setNote] = useState("");
+  const [note, setNote] = useState("");
   const [currentTransaction, setTransaction] = useState(transaction);
   const [categoryId, setCategoryId] = useState("");
   const [accountId, setAccountId] = useState("");
-
-  const { isLoading, isError, error, data: users } = useGetUsers();
-  const { currentUser } = useUserStore();
-
-  const {
-    isLoading: isLoadingCategories,
-    isError: isErrorCategories,
-    error: errorCategories,
-    data: categories,
-  } = useGetCategories(
-    currentUser?.id!,
-    currentTransaction ? "expense" : "income"
-  );
 
   const { addMutation } = useAddTransaction();
 
@@ -108,30 +95,9 @@ export default function AddTranstaction({
               />
             </Flex>
 
-            <Flex
-              width="100%"
-              mt={4}
-              align="center"
-              justify="space-around"
-              gap={4}
-            >
-              <Text>Category</Text>
-              <Select
-                width="50%"
-                variant="flushed"
-                placeholder="Not Selected"
-                size="md"
-                color="black"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-              >
-                {categories?.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Select>
-            </Flex>
+            <CategoriesSelect
+              {...{ categoryId, setCategoryId, currentTransaction }}
+            />
 
             <Flex
               width="100%"
