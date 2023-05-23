@@ -3,15 +3,40 @@
 import CategoryField from "@/app/components/categories/CategoryField";
 import { Flex, Text, Input, Button, Select, Textarea } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import useGetTransactionById from "@/hooks/useGetTransactionById";
+import CategoriesSelect from "@/app/components/transactions/CategoriesSelect";
+import "react-datepicker/dist/react-datepicker.css";
+import UsersSelect from "@/app/components/transactions/Users";
 
 export default function EditTransaction() {
   const pathname = usePathname();
+  const [categoryId, setCategoryId] = useState("");
+  const [accountId, setAccountId] = useState("");
+
   const [date, setDate] = useState(new Date());
   const [note, setNote] = useState("");
   const [currentTransaction, setTransaction] = useState(true);
   const [amount, setAmount] = useState(20);
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: transaction,
+  } = useGetTransactionById(pathname.split("/")[3]);
+
+  useEffect(() => {
+    if (transaction) {
+      setAmount(transaction.amount);
+      setTransaction(transaction.transactionType === "expense" ? true : false);
+      setDate(new Date(transaction.date.seconds * 1000));
+      setNote(transaction.note);
+      setCategoryId(transaction.categoryId);
+      setAccountId(transaction.accountId);
+    }
+  }, [transaction?.amount]);
 
   return (
     <Flex
@@ -49,20 +74,9 @@ export default function EditTransaction() {
         />
       </Flex>
 
-      <Flex width="100%" mt={4} align="center" justify="space-around" gap={4}>
-        <Text>Category</Text>
-        <Select
-          width="50%"
-          variant="flushed"
-          placeholder="Not Selected"
-          size="md"
-          color="black"
-        >
-          <option value="option1">Fuel</option>
-          <option value="option2">General</option>
-          <option value="option3">Kids</option>
-        </Select>
-      </Flex>
+      <CategoriesSelect
+        {...{ categoryId, setCategoryId, currentTransaction }}
+      />
 
       <Flex width="100%" mt={2} align="center" justify="space-around" gap={4}>
         <Text>Amount</Text>
@@ -76,19 +90,7 @@ export default function EditTransaction() {
         />
       </Flex>
 
-      <Flex width="100%" mt={2} align="center" justify="space-around" gap={4}>
-        <Text>Account</Text>
-        <Select
-          color="black"
-          width="50%"
-          variant="flushed"
-          placeholder="Bojan"
-          size="md"
-        >
-          <option value="option1">Bojan</option>
-          <option value="option2">Personal</option>
-        </Select>
-      </Flex>
+      <UsersSelect {...{ accountId, setAccountId }} />
 
       <Textarea
         mt={2}
