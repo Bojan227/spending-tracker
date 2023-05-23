@@ -45,6 +45,7 @@ export default function EditTransaction() {
       width="100%"
       minH="100vh"
       padding="6rem"
+      paddingInline="14rem"
       gap={4}
       color="whiteAlpha.700"
     >
