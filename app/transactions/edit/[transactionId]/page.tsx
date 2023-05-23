@@ -9,6 +9,7 @@ import useGetTransactionById from "@/hooks/useGetTransactionById";
 import CategoriesSelect from "@/app/components/transactions/CategoriesSelect";
 import "react-datepicker/dist/react-datepicker.css";
 import UsersSelect from "@/app/components/transactions/Users";
+import useEditTransaction from "@/hooks/useEditTransaction";
 
 export default function EditTransaction() {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ export default function EditTransaction() {
   const [date, setDate] = useState(new Date());
   const [note, setNote] = useState("");
   const [currentTransaction, setTransaction] = useState(true);
-  const [amount, setAmount] = useState(20);
+  const [amount, setAmount] = useState("");
 
   const {
     isLoading,
@@ -26,6 +27,8 @@ export default function EditTransaction() {
     error,
     data: transaction,
   } = useGetTransactionById(pathname.split("/")[3]);
+
+  const { editMutation } = useEditTransaction();
 
   useEffect(() => {
     if (transaction) {
@@ -84,7 +87,7 @@ export default function EditTransaction() {
         <Input
           color="white"
           value={amount}
-          onChange={(e) => setAmount(parseInt(e.target.value))}
+          onChange={(e) => setAmount(e.target.value)}
           placeholder="Name"
           size="sm"
           w="50%"
@@ -102,9 +105,26 @@ export default function EditTransaction() {
         width="50%"
         color="white"
       />
-      <Button backgroundColor="#f59e0b" color="white">
-        Edit
+      <Button
+        onClick={() =>
+          editMutation.mutate({
+            id: pathname.split("/")[3],
+            note,
+            amount,
+            categoryId,
+            accountId,
+            transactionType: currentTransaction ? "expense" : "income",
+            date,
+          })
+        }
+        backgroundColor="#f59e0b"
+        color="white"
+      >
+        {editMutation.isLoading ? "Loading...." : "Edit"}
       </Button>
+      {editMutation.isError && editMutation.error instanceof Error && (
+        <Text>{editMutation.error.message}</Text>
+      )}
     </Flex>
   );
 }
