@@ -27,6 +27,19 @@ export default function Transactions() {
     data: transactions,
   } = useGetTransactions(currentUser?.id!);
 
+  const total = transactions?.reduce(
+    (acc: { expense: number; income: number }, curr) => {
+      if (curr.transactionType === "expense") {
+        acc.expense += parseInt(curr.amount);
+      } else {
+        acc.income += parseInt(curr.amount);
+      }
+
+      return acc;
+    },
+    { expense: 0, income: 0 }
+  );
+
   return (
     <>
       <Flex
@@ -39,10 +52,10 @@ export default function Transactions() {
       >
         <Flex width="65%" textAlign="center">
           <Text py={1} width="50%" backgroundColor="#22c55e">
-            $20
+            ${total?.income}
           </Text>
           <Text py={1} width="50%" backgroundColor="#dc2626">
-            $20
+            ${total?.expense}
           </Text>
         </Flex>
 
