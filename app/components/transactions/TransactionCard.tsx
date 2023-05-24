@@ -14,12 +14,14 @@ export default function TransactionCard({
   amount,
   Icon,
   transactionId,
+  transactionType,
 }: {
   categoryId: string;
   amount: number;
   date: number;
   transactionId: string;
   Icon: IconType;
+  transactionType: string;
 }) {
   const {
     isLoading,
@@ -51,7 +53,10 @@ export default function TransactionCard({
             <Text py="2">{format(new Date(date * 1000), "EEEE/do-MMM")}</Text>
           </CardBody>
         </Flex>
-        <Text fontSize="1.5rem" color="red">
+        <Text
+          fontSize="1.5rem"
+          color={transactionType === "expense" ? "red" : "green"}
+        >
           ${amount}
         </Text>
       </Card>
