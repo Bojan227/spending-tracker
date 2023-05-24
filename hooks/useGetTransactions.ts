@@ -3,14 +3,10 @@ import { TransactionResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-async function getTransactions(accountId: string, transactionType: string) {
+async function getTransactions(accountId: string) {
   const collectionRef = collection(db, "transactions");
   const querySnapshot = await getDocs(
-    query(
-      collectionRef,
-      where("accountId", "==", accountId),
-      where("transactionType", "==", transactionType)
-    )
+    query(collectionRef, where("accountId", "==", accountId))
   );
 
   const transactions: TransactionResponse[] = [];
@@ -25,14 +21,11 @@ async function getTransactions(accountId: string, transactionType: string) {
   return transactions;
 }
 
-export default function useGetTransactions(
-  accountId: string,
-  transactionType: string
-) {
+export default function useGetTransactions(accountId: string) {
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["transactions", transactionType, accountId],
-    queryFn: async () => getTransactions(accountId, transactionType),
-    enabled: Boolean(transactionType) || Boolean(accountId),
+    queryKey: ["transactions", accountId],
+    queryFn: async () => getTransactions(accountId),
+    enabled: Boolean(accountId),
   });
 
   return { isLoading, isError, error, data };

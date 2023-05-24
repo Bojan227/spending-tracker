@@ -19,14 +19,13 @@ import useGetTransactions from "@/hooks/useGetTransactions";
 import { useUserStore } from "@/store";
 
 export default function Transactions() {
-  const pathname = usePathname();
   const { currentUser } = useUserStore();
   const {
     isLoading,
     isError,
     error,
     data: transactions,
-  } = useGetTransactions(currentUser?.id!, "expense");
+  } = useGetTransactions(currentUser?.id!);
 
   return (
     <>
@@ -51,7 +50,13 @@ export default function Transactions() {
           <SpendingFilter />
           <AddTranstaction transaction={true} />
         </Flex>
-        <Flex width="100%" justify="center">
+        <Flex
+          width="100%"
+          justify="center"
+          align="center"
+          gap="5px"
+          direction="column"
+        >
           {isLoading ? (
             <Spinner />
           ) : transactions ? (
@@ -63,6 +68,7 @@ export default function Transactions() {
                 categoryId={transaction.categoryId}
                 date={transaction.date.seconds}
                 Icon={FaPlus}
+                transactionType={transaction.transactionType}
               />
             ))
           ) : (
