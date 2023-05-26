@@ -30,7 +30,6 @@ async function getTransactions(
       ...(doc.data() as Omit<TransactionResponse, "id">),
     };
 
-    const filterTypeLower = filterType.toLowerCase();
     const currentDate = new Date(date * 1000);
 
     const startOfCurrentWeek = startOfWeek(currentDate, { weekStartsOn: 1 }); // Assuming Monday is the start of the week
@@ -56,13 +55,13 @@ async function getTransactions(
       new Date(transaction.date.seconds * 1000)
     );
 
-    if (filterTypeLower === "monthly" && sameMonth) {
+    if (filterType === "monthly" && sameMonth) {
       transactions.push(transaction);
-    } else if (filterTypeLower === "daily" && sameDay) {
+    } else if (filterType === "daily" && sameDay) {
       transactions.push(transaction);
-    } else if (filterTypeLower === "weekly" && isWithinWeek) {
+    } else if (filterType === "weekly" && isWithinWeek) {
       transactions.push(transaction);
-    } else if (filterTypeLower === "yearly" && sameYear) {
+    } else if (filterType === "yearly" && sameYear) {
       transactions.push(transaction);
     }
   });
