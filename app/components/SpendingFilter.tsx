@@ -17,7 +17,7 @@ import { useFilterStore } from "@/store/filter-store";
 
 export default function SpendingFilter() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { currentPeriod, setPeriod } = useFilterStore();
+  const { setDateInSeconds, currentPeriod, setPeriod } = useFilterStore();
   const [value, setValue] = useState("Monthly");
 
   return (
@@ -40,7 +40,11 @@ export default function SpendingFilter() {
             <RadioGroup
               onChange={(text) => {
                 setValue(text);
-                setPeriod(text as "monthly" | "daily" | "weekly" | "yearly");
+                setPeriod(
+                  text as "monthly" | "daily" | "weekly" | "yearly",
+                  new Date().getTime() / 1000
+                );
+                setDateInSeconds(new Date().getTime() / 1000);
                 onClose();
               }}
               value={value}
