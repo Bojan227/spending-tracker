@@ -13,9 +13,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useFilterStore } from "@/store/filter-store";
 
 export default function SpendingFilter() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { currentPeriod, setPeriod } = useFilterStore();
   const [value, setValue] = useState("Monthly");
 
   return (
@@ -26,7 +28,7 @@ export default function SpendingFilter() {
         color="#f59e0b"
         onClick={onOpen}
       >
-        {value}
+        {currentPeriod}
       </Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -35,7 +37,14 @@ export default function SpendingFilter() {
           <ModalHeader>Show Spending</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <RadioGroup onChange={setValue} value={value}>
+            <RadioGroup
+              onChange={(text) => {
+                setValue(text);
+                setPeriod(text as "monthly" | "daily" | "weekly" | "yearly");
+                onClose();
+              }}
+              value={value}
+            >
               <Stack direction="column">
                 <Radio value="Daily">Daily</Radio>
                 <Radio value="Weekly">Weekly</Radio>

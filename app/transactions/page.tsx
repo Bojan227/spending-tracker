@@ -72,7 +72,7 @@ export default function Transactions() {
         >
           {isLoading ? (
             <Spinner />
-          ) : transactions ? (
+          ) : transactions?.length! > 0 ? (
             transactions?.map((transaction) => (
               <TransactionCard
                 key={transaction.id}
