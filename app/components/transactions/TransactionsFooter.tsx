@@ -1,4 +1,5 @@
 "use client";
+import { getNextDateInSeconds } from "@/utils/getNextDateInSeconds";
 import { useFilterStore } from "@/store/filter-store";
 import { Flex, Icon } from "@chakra-ui/react";
 import {
@@ -14,44 +15,30 @@ export default function TransactionsFooter() {
 
   const handleNext = () => {
     const currentDate = new Date(dateInSeconds * 1000);
+    const nextDateInSeconds = getNextDateInSeconds(currentDate, filterType, 1);
 
-    if (filterType === "weekly") {
-      const nextWeekStartDate = new Date(currentDate);
-      nextWeekStartDate.setDate(currentDate.getDate() + 7);
+    setDateInSeconds(nextDateInSeconds);
+    setPeriod(filterType, nextDateInSeconds);
+  };
 
-      const nextWeekStartInSeconds =
-        new Date(nextWeekStartDate).getTime() / 1000;
+  const handlePrev = () => {
+    const currentDate = new Date(dateInSeconds * 1000);
+    const prevDateInSeconds = getNextDateInSeconds(currentDate, filterType, -1);
 
-      setDateInSeconds(nextWeekStartInSeconds);
-      setPeriod(filterType, nextWeekStartInSeconds);
-    } else if (filterType === "daily") {
-      const nextDay = new Date(currentDate);
-      nextDay.setDate(currentDate.getDate() + 1);
-
-      const nextDayInSeconds = new Date(nextDay).getTime() / 1000;
-      setDateInSeconds(nextDayInSeconds);
-      setPeriod(filterType, nextDayInSeconds);
-    } else if (filterType === "monthly") {
-      const nextMonth = new Date(currentDate);
-      nextMonth.setMonth(currentDate.getMonth() + 1);
-
-      const nextMonthInSeconds = new Date(nextMonth).getTime() / 1000;
-      setDateInSeconds(nextMonthInSeconds);
-      setPeriod(filterType, nextMonthInSeconds);
-    } else if (filterType === "yearly") {
-      const nextYear = new Date(currentDate);
-      nextYear.setFullYear(currentDate.getFullYear() + 1);
-
-      const nextYearInSeconds = new Date(nextYear).getTime() / 1000;
-      setDateInSeconds(nextYearInSeconds);
-      setPeriod(filterType, nextYearInSeconds);
-    }
+    setDateInSeconds(prevDateInSeconds);
+    setPeriod(filterType, prevDateInSeconds);
   };
 
   return (
     <Flex backgroundColor="#44403c" width="100%" py={4} justify="space-around">
       <Flex cursor="pointer" gap={6}>
-        <Icon color="#f59e0b" as={FaArrowLeft} w={6} h={6} />
+        <Icon
+          onClick={handlePrev}
+          color="#f59e0b"
+          as={FaArrowLeft}
+          w={6}
+          h={6}
+        />
         <Icon
           onClick={handleNext}
           as={FaArrowRight}
