@@ -50,7 +50,7 @@ export default function TransactionCard({
         <Flex direction="column" flex={1}>
           <CardBody>
             {category && <Text py="2">{category.name}</Text>}
-            <Text py="2">{format(new Date(date * 1000), "EEEE/do-MMM")}</Text>
+            <Text py="2">{format(new Date(date * 1000), "d/LLL/yyyy")}</Text>
           </CardBody>
         </Flex>
         <Text
