@@ -5,34 +5,9 @@ import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-import useGetCategoryById, {
-  getCategoryById,
-} from "@/hooks/useGetCategoryById";
+import { getCategoryById } from "@/hooks/useGetCategoryById";
 
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    backgroundColor: "#E4E4E4",
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-
-    flexDirection: "row",
-  },
-  header: {
-    flexDirection: "row",
-    alignSelf: "center",
-    gap: 10,
-  },
-  table: {
-    width: "auto",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    marginTop: 20,
-  },
   tableRow: {
     margin: "auto",
     flexDirection: "row",
@@ -47,7 +22,8 @@ const styles = StyleSheet.create({
   tableCell: {
     margin: "auto",
     marginTop: 5,
-    fontSize: 10,
+    fontSize: 12,
+    color: "whitesmoke",
   },
 });
 
@@ -83,7 +59,18 @@ export default function TableContent({
                 <Text style={styles.tableCell}>{categories[i]?.name}</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>{transaction.amount}</Text>
+                <Text
+                  style={{
+                    ...styles.tableCell,
+                    color:
+                      transaction.transactionType === "expense"
+                        ? "red"
+                        : "green",
+                    fontSize: 15,
+                  }}
+                >
+                  ${transaction.amount}
+                </Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>

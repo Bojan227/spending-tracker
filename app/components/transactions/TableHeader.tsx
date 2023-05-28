@@ -1,9 +1,10 @@
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   tableRow: {
     margin: "auto",
     flexDirection: "row",
+    backgroundColor: "skyblue",
   },
   tableCol: {
     width: "25%",
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
   tableCell: {
     margin: "auto",
     marginTop: 5,
-    fontSize: 10,
+    fontSize: 12,
   },
 });
 
