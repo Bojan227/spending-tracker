@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Flex,
-  Text,
-  Input,
-  Button,
-  Box,
-  Icon,
-  Spinner,
-} from "@chakra-ui/react";
-import { usePathname } from "next/navigation";
+import { Flex, Text, Spinner } from "@chakra-ui/react";
 import AddTranstaction from "../components/transactions/AddTransaction";
 import { FaPlus } from "react-icons/fa";
 import TransactionCard from "../components/transactions/TransactionCard";
@@ -97,7 +88,8 @@ export default function Transactions() {
         </Flex>
         {isError && error instanceof Error && <Text>{error.message}</Text>}
       </Flex>
-      <TransactionsFooter />
+
+      {transactions && <TransactionsFooter transactions={transactions} />}
     </>
   );
 }
