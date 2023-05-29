@@ -17,7 +17,7 @@ export default function Home() {
     >
       <Flex align="center" pb={6} justify="space-around" w="50%">
         <SpendingFilter />
-        <SwitchAccount />
+        <SwitchAccount iconColor="skyblue" />
       </Flex>
       <Box w="50%">
         <Progress

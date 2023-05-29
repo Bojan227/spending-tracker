@@ -6,6 +6,7 @@ import { FaArrowLeft, FaArrowRight, FaFilter, FaUser } from "react-icons/fa";
 
 import ExportModal from "./ExportModal";
 import { TransactionResponse } from "@/types";
+import SwitchAccount from "../spendings/SwitchAccountModal";
 
 export default function TransactionsFooter({
   transactions,
@@ -52,7 +53,7 @@ export default function TransactionsFooter({
       <Flex gap={6} cursor="pointer">
         <ExportModal transactions={transactions} />
         <Icon as={FaFilter} color="#f59e0b" w={6} h={6} />
-        <Icon as={FaUser} color="#f59e0b" w={6} h={6} />
+        <SwitchAccount iconColor="#f59e0b" />
       </Flex>
     </Flex>
   );

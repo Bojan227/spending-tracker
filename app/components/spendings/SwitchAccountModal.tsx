@@ -23,17 +23,35 @@ import {
 } from "@chakra-ui/react";
 
 import React, { useState } from "react";
+import { useUserStore } from "@/store";
+import useGetUsers from "@/hooks/useGetUsers";
 
 import { FaUser } from "react-icons/fa";
 
-export default function SwitchAccount() {
+export default function SwitchAccount({ iconColor }: { iconColor: string }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
-  const [value, setValue] = useState("");
+
+  const { currentUser, switchUser } = useUserStore();
+  const { data: users, isLoading, isError, error } = useGetUsers();
+
+  const [value, setValue] = useState(currentUser?.id!);
+  const handleSwitch = (value: string) => {
+    const user = users?.find((user) => user.id === value);
+    switchUser(user);
+    setValue(user?.id!);
+  };
 
   return (
     <>
-      <Icon onClick={onOpen} as={FaUser} color="skyblue" cursor="pointer" />
+      <Icon
+        onClick={onOpen}
+        as={FaUser}
+        color={iconColor}
+        cursor="pointer"
+        w={6}
+        h={6}
+      />
       <Modal
         initialFocusRef={initialRef}
         isOpen={isOpen}
@@ -45,11 +63,13 @@ export default function SwitchAccount() {
           <ModalHeader>Switch Account</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <RadioGroup onClick={onClose} onChange={setValue} value={value}>
+            <RadioGroup onClick={onClose} onChange={handleSwitch} value={value}>
               <Stack direction="column">
-                <Radio value="all">All accounts</Radio>
-                <Radio value="Bojan">Bojan</Radio>
-                <Radio value="Personal">Personal</Radio>
+                {users?.map((user) => (
+                  <Radio key={user.id} value={user.id}>
+                    {user.userName}
+                  </Radio>
+                ))}
               </Stack>
             </RadioGroup>
           </ModalBody>
