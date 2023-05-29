@@ -32,14 +32,14 @@ export default function Transactions() {
   );
 
   return (
-    <>
+    <Flex direction="column" align="center" width="100%" minH="100vh" gap={4}>
       <Flex
         direction="column"
-        align="center"
+        flex="1"
         width="100%"
-        minH="100vh"
-        padding="6rem"
+        align="center"
         gap={4}
+        padding="6rem"
       >
         <Flex width="65%" textAlign="center">
           <Text py={1} width="50%" backgroundColor="#22c55e">
@@ -64,7 +64,7 @@ export default function Transactions() {
           {isLoading ? (
             <Spinner />
           ) : transactions?.length! > 0 ? (
-            transactions?.map((transaction) => (
+            transactions?.map((transaction, i) => (
               <TransactionCard
                 key={transaction.id}
                 transactionId={transaction.id}
@@ -86,10 +86,9 @@ export default function Transactions() {
             </Text>
           )}
         </Flex>
-        {isError && error instanceof Error && <Text>{error.message}</Text>}
       </Flex>
-
       {transactions && <TransactionsFooter transactions={transactions} />}
-    </>
+      {isError && error instanceof Error && <Text>{error.message}</Text>}
+    </Flex>
   );
 }
