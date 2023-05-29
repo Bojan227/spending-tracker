@@ -7,11 +7,14 @@ import { FaArrowLeft, FaArrowRight, FaFilter, FaUser } from "react-icons/fa";
 import ExportModal from "./ExportModal";
 import { TransactionResponse } from "@/types";
 import SwitchAccount from "../spendings/SwitchAccountModal";
+import FilterCategory from "./FilterCategoryModal";
 
 export default function TransactionsFooter({
   transactions,
+  handleFilterByCategory,
 }: {
   transactions: TransactionResponse[];
+  handleFilterByCategory: (value: string) => void;
 }) {
   const { filterType, dateInSeconds, setPeriod, setDateInSeconds } =
     useFilterStore();
@@ -52,7 +55,7 @@ export default function TransactionsFooter({
       </Flex>
       <Flex gap={6} cursor="pointer">
         <ExportModal transactions={transactions} />
-        <Icon as={FaFilter} color="#f59e0b" w={6} h={6} />
+        <FilterCategory handleFilterByCategory={handleFilterByCategory} />
         <SwitchAccount iconColor="#f59e0b" />
       </Flex>
     </Flex>

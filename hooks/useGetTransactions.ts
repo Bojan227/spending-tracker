@@ -3,79 +3,40 @@ import { useFilterStore } from "@/store/filter-store";
 import { TransactionResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import {
-  isSameDay,
-  isSameMonth,
-  isThisYear,
-  isSameYear,
-  startOfWeek,
-  endOfWeek,
-  isWithinInterval,
-} from "date-fns";
+import { isTransactionIncluded } from "@/utils/isTransactionIncluded";
+import { filterTransactions } from "@/utils/filterTransactions";
 
 async function getTransactions(
   accountId: string,
   filterType: "monthly" | "weekly" | "daily" | "yearly",
-  date: number
+  date: number,
+  categoryId?: string
 ) {
   const collectionRef = collection(db, "transactions");
   const querySnapshot = await getDocs(
     query(collectionRef, where("accountId", "==", accountId))
   );
 
-  const transactions: TransactionResponse[] = [];
-  querySnapshot.forEach((doc) => {
-    const transaction = {
-      id: doc.id,
-      ...(doc.data() as Omit<TransactionResponse, "id">),
-    };
-
-    const currentDate = new Date(date * 1000);
-
-    const startOfCurrentWeek = startOfWeek(currentDate, { weekStartsOn: 1 }); // Assuming Monday is the start of the week
-    const endOfCurrentWeek = endOfWeek(currentDate, { weekStartsOn: 1 });
-
-    const isWithinWeek = isWithinInterval(
-      new Date(transaction.date.seconds * 1000),
-      { start: startOfCurrentWeek, end: endOfCurrentWeek }
-    );
-
-    const sameDay = isSameDay(
-      currentDate,
-      new Date(transaction.date.seconds * 1000)
-    );
-
-    const sameMonth = isSameMonth(
-      currentDate,
-      new Date(transaction.date.seconds * 1000)
-    );
-
-    const sameYear = isSameYear(
-      currentDate,
-      new Date(transaction.date.seconds * 1000)
-    );
-
-    if (filterType === "monthly" && sameMonth) {
-      transactions.push(transaction);
-    } else if (filterType === "daily" && sameDay) {
-      transactions.push(transaction);
-    } else if (filterType === "weekly" && isWithinWeek) {
-      transactions.push(transaction);
-    } else if (filterType === "yearly" && sameYear) {
-      transactions.push(transaction);
-    }
-  });
-
-  return transactions;
+  return filterTransactions(querySnapshot, filterType, date, categoryId);
 }
 
-export default function useGetTransactions(accountId: string) {
+export default function useGetTransactions(
+  accountId: string,
+  categoryId?: string
+) {
   const { filterType, dateInSeconds } = useFilterStore();
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["transactions", accountId, filterType, dateInSeconds],
-    queryFn: async () => getTransactions(accountId, filterType, dateInSeconds),
-    enabled: Boolean(accountId),
+    queryKey: [
+      "transactions",
+      accountId,
+      filterType,
+      dateInSeconds,
+      categoryId,
+    ],
+    queryFn: async () =>
+      getTransactions(accountId, filterType, dateInSeconds, categoryId),
+    enabled: Boolean(accountId) || Boolean(categoryId),
   });
 
   return { isLoading, isError, error, data };

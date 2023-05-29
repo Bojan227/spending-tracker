@@ -8,15 +8,20 @@ import SpendingFilter from "../components/SpendingFilter";
 import TransactionsFooter from "../components/transactions/TransactionsFooter";
 import useGetTransactions from "@/hooks/useGetTransactions";
 import { useUserStore } from "@/store";
+import { useState } from "react";
 
 export default function Transactions() {
   const { currentUser } = useUserStore();
+  const [categoryFilter, setCategoryFilter] = useState<string | undefined>(
+    undefined
+  );
+
   const {
     isLoading,
     isError,
     error,
     data: transactions,
-  } = useGetTransactions(currentUser?.id!);
+  } = useGetTransactions(currentUser?.id!, categoryFilter);
 
   const total = transactions?.reduce(
     (acc: { expense: number; income: number }, curr) => {
@@ -30,6 +35,11 @@ export default function Transactions() {
     },
     { expense: 0, income: 0 }
   );
+
+  function handleFilterByCategory(value: string) {
+    console.log(value);
+    setCategoryFilter(value);
+  }
 
   return (
     <Flex direction="column" align="center" width="100%" minH="100vh" gap={4}>
@@ -87,7 +97,12 @@ export default function Transactions() {
           )}
         </Flex>
       </Flex>
-      {transactions && <TransactionsFooter transactions={transactions} />}
+      {transactions && (
+        <TransactionsFooter
+          handleFilterByCategory={handleFilterByCategory}
+          transactions={transactions}
+        />
+      )}
       {isError && error instanceof Error && <Text>{error.message}</Text>}
     </Flex>
   );

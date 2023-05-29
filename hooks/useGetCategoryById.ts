@@ -1,13 +1,14 @@
 import { db } from "@/app/firebase";
+import { Category } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { getDoc, doc } from "firebase/firestore";
 
-const getCategoryById = async (categoryId: string) => {
+export const getCategoryById = async (categoryId: string) => {
   const userRef = doc(db, "categories", categoryId);
   const userDoc = await getDoc(userRef);
 
   if (userDoc.exists()) {
-    return userDoc.data();
+    return userDoc.data() as Category;
   } else {
     throw new Error("Category not found");
   }
@@ -15,7 +16,7 @@ const getCategoryById = async (categoryId: string) => {
 
 export default function useGetCategoryById(categoryId: string) {
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["users", categoryId],
+    queryKey: ["categories", categoryId],
     queryFn: async () => getCategoryById(categoryId),
     enabled: Boolean(categoryId),
   });
