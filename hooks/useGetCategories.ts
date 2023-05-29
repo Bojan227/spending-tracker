@@ -5,13 +5,13 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 
 async function getCategories(userId: string, transactionType: string) {
   const collectionRef = collection(db, "categories");
-  const querySnapshot = await getDocs(
-    query(
-      collectionRef,
-      where("userId", "==", userId),
-      where("type", "==", transactionType)
-    )
-  );
+  let queryRef = query(collectionRef, where("userId", "==", userId));
+
+  if (transactionType !== "all") {
+    queryRef = query(queryRef, where("type", "==", transactionType));
+  }
+
+  const querySnapshot = await getDocs(queryRef);
 
   const categories: Category[] = [];
   querySnapshot.forEach((doc) => {
