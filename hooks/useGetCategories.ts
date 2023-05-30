@@ -4,6 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 async function getCategories(userId: string, transactionType: string) {
+  if (!userId || !transactionType) {
+    return [];
+  }
+
   const collectionRef = collection(db, "categories");
   let queryRef = query(collectionRef, where("userId", "==", userId));
 

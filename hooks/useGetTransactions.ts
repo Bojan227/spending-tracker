@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { isTransactionIncluded } from "@/utils/isTransactionIncluded";
 import { filterTransactions } from "@/utils/filterTransactions";
+import { useUserStore } from "@/store";
 
 async function getTransactions(
   accountId: string,
@@ -12,6 +13,10 @@ async function getTransactions(
   date: number,
   categoryId?: string
 ) {
+  if (!accountId) {
+    return [];
+  }
+
   const collectionRef = collection(db, "transactions");
   const querySnapshot = await getDocs(
     query(collectionRef, where("accountId", "==", accountId))
@@ -20,23 +25,26 @@ async function getTransactions(
   return filterTransactions(querySnapshot, filterType, date, categoryId);
 }
 
-export default function useGetTransactions(
-  accountId: string,
-  categoryId?: string
-) {
-  const { filterType, dateInSeconds } = useFilterStore();
+export default function useGetTransactions(accountId: string) {
+  const { filterType, dateInSeconds, categoryFilter } = useFilterStore();
+  const { currentUser } = useUserStore();
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: [
       "transactions",
-      accountId,
+      currentUser?.id,
       filterType,
       dateInSeconds,
-      categoryId,
+      categoryFilter,
     ],
     queryFn: async () =>
-      getTransactions(accountId, filterType, dateInSeconds, categoryId),
-    enabled: Boolean(accountId) || Boolean(categoryId),
+      getTransactions(
+        currentUser?.id!,
+        filterType,
+        dateInSeconds,
+        categoryFilter
+      ),
+    enabled: Boolean(currentUser?.id),
   });
 
   return { isLoading, isError, error, data };

@@ -6,8 +6,6 @@ import { queryClient } from "../app/constants/queryClient";
 import { Category } from "@/types";
 
 const addCategory = async (newCategory: Omit<Category, "id">) => {
-  console.log(newCategory);
-
   if (
     !newCategory.name ||
     !newCategory.chartColor ||
