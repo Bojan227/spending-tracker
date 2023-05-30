@@ -7,22 +7,11 @@ import TransactionCard from "../components/transactions/TransactionCard";
 import SpendingFilter from "../components/SpendingFilter";
 import TransactionsFooter from "../components/transactions/TransactionsFooter";
 import { useTransactionsStore } from "@/store/TransactionsStore";
+import useGetTotal from "@/hooks/useGetTotal";
 
 export default function Transactions() {
   const { transactions } = useTransactionsStore();
-
-  const total = transactions?.reduce(
-    (acc: { expense: number; income: number }, curr) => {
-      if (curr.transactionType === "expense") {
-        acc.expense += parseInt(curr.amount);
-      } else {
-        acc.income += parseInt(curr.amount);
-      }
-
-      return acc;
-    },
-    { expense: 0, income: 0 }
-  );
+  const total = useGetTotal();
 
   return (
     <Flex direction="column" align="center" width="100%" minH="100vh" gap={4}>
@@ -78,7 +67,7 @@ export default function Transactions() {
           )}
         </Flex>
       </Flex>
-      {transactions && <TransactionsFooter transactions={transactions} />}
+      <TransactionsFooter />
     </Flex>
   );
 }
