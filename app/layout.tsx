@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import Nav from "./components/navigation";
 import { CurrentUserProvider } from "./current-user";
+import { TransactionsProvider } from "./transactions-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <CurrentUserProvider>
-            <Nav />
-            {children}
+            <TransactionsProvider>
+              <Nav />
+              {children}
+            </TransactionsProvider>
           </CurrentUserProvider>
         </Providers>
       </body>
