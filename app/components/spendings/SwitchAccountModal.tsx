@@ -22,7 +22,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserStore } from "@/store";
 import useGetUsers from "@/hooks/useGetUsers";
 
@@ -35,7 +35,14 @@ export default function SwitchAccount({ iconColor }: { iconColor: string }) {
   const { currentUser, switchUser } = useUserStore();
   const { data: users, isLoading, isError, error } = useGetUsers();
 
-  const [value, setValue] = useState(currentUser?.id!);
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      setValue(currentUser.id);
+    }
+  }, [currentUser?.id]);
+
   const handleSwitch = (value: string) => {
     const user = users?.find((user) => user.id === value);
     switchUser(user);
