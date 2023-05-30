@@ -12,13 +12,9 @@ export function TransactionsProvider({
   children: React.ReactNode;
 }) {
   const { currentUser } = useUserStore();
-  const { categoryFilter } = useFilterStore();
   const { loadTransactions } = useTransactionsStore();
 
-  const { data: transactions } = useGetTransactions(
-    currentUser?.id!,
-    categoryFilter
-  );
+  const { data: transactions } = useGetTransactions(currentUser?.id!)!;
 
   useEffect(() => {
     if (transactions) {
