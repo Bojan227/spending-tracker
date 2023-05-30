@@ -15,16 +15,13 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { FaFileExport } from "react-icons/fa";
 import { PdfDoc } from "../PdfDoc";
 import { useFilterStore } from "@/store/filter-store";
-import { useUserStore } from "@/store";
-import { TransactionResponse } from "@/types";
+import { useTransactionsStore } from "@/store/TransactionsStore";
 
-export default function ExportModal({
-  transactions,
-}: {
-  transactions: TransactionResponse[];
-}) {
+export default function ExportModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { currentPeriod } = useFilterStore();
+
+  const { transactions } = useTransactionsStore();
 
   return (
     <>

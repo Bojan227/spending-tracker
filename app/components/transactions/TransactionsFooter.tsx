@@ -5,15 +5,10 @@ import { Flex, Icon } from "@chakra-ui/react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 import ExportModal from "./ExportModal";
-import { TransactionResponse } from "@/types";
 import SwitchAccount from "../spendings/SwitchAccountModal";
 import FilterCategory from "./FilterCategoryModal";
 
-export default function TransactionsFooter({
-  transactions,
-}: {
-  transactions: TransactionResponse[];
-}) {
+export default function TransactionsFooter() {
   const { filterType, dateInSeconds, setPeriod, setDateInSeconds } =
     useFilterStore();
 
@@ -52,7 +47,7 @@ export default function TransactionsFooter({
         />
       </Flex>
       <Flex gap={6} cursor="pointer">
-        <ExportModal transactions={transactions} />
+        <ExportModal />
         <FilterCategory />
         <SwitchAccount iconColor="#f59e0b" />
       </Flex>
