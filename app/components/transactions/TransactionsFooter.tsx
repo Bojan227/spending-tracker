@@ -2,7 +2,7 @@
 import { getNextDateInSeconds } from "@/utils/getNextDateInSeconds";
 import { useFilterStore } from "@/store/filter-store";
 import { Flex, Icon } from "@chakra-ui/react";
-import { FaArrowLeft, FaArrowRight, FaFilter, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 import ExportModal from "./ExportModal";
 import { TransactionResponse } from "@/types";
@@ -11,10 +11,8 @@ import FilterCategory from "./FilterCategoryModal";
 
 export default function TransactionsFooter({
   transactions,
-  handleFilterByCategory,
 }: {
   transactions: TransactionResponse[];
-  handleFilterByCategory: (value: string) => void;
 }) {
   const { filterType, dateInSeconds, setPeriod, setDateInSeconds } =
     useFilterStore();
@@ -55,7 +53,7 @@ export default function TransactionsFooter({
       </Flex>
       <Flex gap={6} cursor="pointer">
         <ExportModal transactions={transactions} />
-        <FilterCategory handleFilterByCategory={handleFilterByCategory} />
+        <FilterCategory />
         <SwitchAccount iconColor="#f59e0b" />
       </Flex>
     </Flex>

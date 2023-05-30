@@ -22,23 +22,19 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserStore } from "@/store";
 
 import { FaFilter } from "react-icons/fa";
 import useGetCategories from "@/hooks/useGetCategories";
+import { useFilterStore } from "@/store/filter-store";
 
-export default function FilterCategory({
-  handleFilterByCategory,
-}: {
-  handleFilterByCategory: (value: string) => void;
-}) {
+export default function FilterCategory() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
 
-  const [value, setValue] = useState("all");
-
   const { currentUser } = useUserStore();
+  const { categoryFilter, setCategoryFilter } = useFilterStore();
 
   const {
     data: categories,
@@ -46,11 +42,6 @@ export default function FilterCategory({
     isError,
     error,
   } = useGetCategories(currentUser?.id!, "all");
-
-  function handleSelectFilter(value: string) {
-    setValue(value);
-    handleFilterByCategory(value);
-  }
 
   return (
     <>
@@ -63,13 +54,13 @@ export default function FilterCategory({
       >
         <ModalOverlay />
         <ModalContent backgroundColor="#44403c" color="white">
-          <ModalHeader>Switch Account</ModalHeader>
+          <ModalHeader>Category Filter</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <RadioGroup
+              onChange={setCategoryFilter}
+              value={categoryFilter}
               onClick={onClose}
-              onChange={handleSelectFilter}
-              value={value}
             >
               <Stack direction="column">
                 <Radio value="all">All Categories</Radio>
