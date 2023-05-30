@@ -3,7 +3,6 @@
 import useGetTransactions from "@/hooks/useGetTransactions";
 import { useUserStore } from "@/store";
 import { useTransactionsStore } from "@/store/TransactionsStore";
-import { useFilterStore } from "@/store/filter-store";
 import { useEffect } from "react";
 
 export function TransactionsProvider({
@@ -14,7 +13,7 @@ export function TransactionsProvider({
   const { currentUser } = useUserStore();
   const { loadTransactions } = useTransactionsStore();
 
-  const { data: transactions } = useGetTransactions(currentUser?.id!)!;
+  const { data: transactions } = useGetTransactions(currentUser?.id!);
 
   useEffect(() => {
     if (transactions) {
