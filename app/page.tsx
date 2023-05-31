@@ -4,21 +4,46 @@ import InfoBox from "./components/spendings/InfoBox";
 import SpendingFilter from "./components/SpendingFilter";
 import SwitchAccount from "./components/spendings/SwitchAccountModal";
 import AddTranstaction from "./components/transactions/AddTransaction";
-import { useTransactionsStore } from "@/store/TransactionsStore";
 import useGetTotal from "@/hooks/useGetTotal";
+import { getCategoryById } from "@/hooks/useGetCategoryById";
+import { useEffect, useMemo, useState } from "react";
+import { Category } from "@/types";
 
 export default function Home() {
-  const { transactions } = useTransactionsStore();
-  const total = useGetTotal();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { total, percentage, balance, totalSum, expenses } = useGetTotal();
 
-  const balance = Math.abs(total.income - total.expense);
-  const totalSum = total.income + total.expense;
-  const incomeTransactionsTotal = transactions.reduce(
-    (acc, curr) =>
-      (acc += curr.transactionType === "income" ? parseInt(curr.amount) : 0),
-    0
-  );
-  const percentage = (incomeTransactionsTotal / totalSum) * 100;
+  const expensesTotal = useMemo(() => {
+    return expenses.reduce<{ [key: string]: number }>((acc, curr) => {
+      const categoryName = categories.find(
+        (category) => curr.categoryId === category.id
+      )?.name!;
+
+      if (!acc[categoryName]) {
+        acc[categoryName] = 0;
+      }
+
+      acc[categoryName] += parseInt(curr.amount);
+
+      return acc;
+    }, {});
+  }, [expenses]);
+
+  useEffect(() => {
+    async function getCategories() {
+      const categoires = await Promise.all(
+        expenses?.map(({ categoryId }) => {
+          return getCategoryById(categoryId);
+        })
+      );
+
+      setCategories(categoires);
+    }
+
+    if (expenses) {
+      getCategories();
+    }
+  }, [expenses.length]);
 
   return (
     <Flex
@@ -48,8 +73,16 @@ export default function Home() {
       </Box>
       <Box w="50%" borderBottom="1px dashed white">
         <InfoBox label="Expense" value={total.expense} color="red" />
-        <Flex py={4} pl={6} fontSize="1.2rem">
-          <InfoBox width="100%" label="Entertaiment" value={0} color="white" />
+        <Flex direction="column" py={4} pl={6} fontSize="1.2rem">
+          {Object.keys(expensesTotal).map((key) => (
+            <InfoBox
+              key={key}
+              width="100%"
+              label={key}
+              value={expensesTotal[key]}
+              color="white"
+            />
+          ))}
         </Flex>
       </Box>
       <InfoBox
