@@ -1,6 +1,7 @@
 import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
+import { motion } from "framer-motion";
 
 interface GroupedTransactionYearly {
   categoryId: string;
@@ -108,15 +109,23 @@ export default function YearlyBarChart({
           </g>
         ))}
 
-        <g fill="steelblue">
-          {yearlyData.map((data) => (
-            <rect
-              x={xScale(data.categoryId)}
-              y={yScale(data.transactions.amount as number)}
-              height={yScale(0) - yScale(data.transactions.amount as number)}
-              width={xScale.bandwidth() / 2}
-              fill={data.chartColor}
-            />
+        <g>
+          {yearlyData.map((data, i) => (
+            <motion.g
+              key={i}
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ duration: 1, delay: 1.2 * i }}
+            >
+              <motion.rect
+                rx="20"
+                x={xScale(data.categoryId)}
+                y={yScale(data.transactions.amount as number)}
+                height={yScale(0) - yScale(data.transactions.amount as number)}
+                width={xScale.bandwidth() / 2}
+                fill={data.chartColor}
+              />
+            </motion.g>
           ))}
         </g>
       </svg>
