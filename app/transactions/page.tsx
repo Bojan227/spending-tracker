@@ -11,7 +11,7 @@ import useGetTotal from "@/hooks/useGetTotal";
 
 export default function Transactions() {
   const { transactions } = useTransactionsStore();
-  const total = useGetTotal();
+  const { total } = useGetTotal();
 
   return (
     <Flex direction="column" align="center" width="100%" minH="100vh" gap={4}>
