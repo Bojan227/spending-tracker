@@ -8,7 +8,7 @@ export const getCategoryById = async (categoryId: string) => {
   const userDoc = await getDoc(userRef);
 
   if (userDoc.exists()) {
-    return userDoc.data() as Category;
+    return { ...userDoc.data(), id: userDoc.id } as Category;
   } else {
     throw new Error("Category not found");
   }
