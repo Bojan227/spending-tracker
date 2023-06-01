@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
@@ -17,7 +16,6 @@ export default function YearlyBarChart({
   categories: Category[];
 }) {
   let [ref, bounds] = useMeasure();
-  const svgRef = useRef<SVGSVGElement | null>(null);
 
   const yearlyData: GroupedTransactionYearly[] = transactions
     .filter((transaction) => transaction.transactionType === "expense")
@@ -54,84 +52,73 @@ export default function YearlyBarChart({
     );
 
   const width = bounds.width;
-  const height = 400;
+  const height = bounds.height;
   const marginTop = 30;
-  const marginRight = 0;
+  const marginRight = 20;
   const marginBottom = 30;
   const marginLeft = 40;
 
-  useEffect(() => {
-    if (!yearlyData[0]?.categoryId) return;
-    if (!categories) return;
+  const xScale = d3
+    .scaleBand()
+    .domain(yearlyData.map((d) => d.categoryId as string))
+    .range([marginLeft, width - marginRight])
+    .padding(0.1);
 
-    // Create scales for x and y axes
-    const xScale = d3
-      .scaleBand()
-      .domain(yearlyData.map((d) => d.categoryId as string))
-      .range([marginLeft, width - marginRight])
-      .padding(0.2);
-
-    const maxValue = d3.max(yearlyData, (e) => e.transactions.amount);
-
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, maxValue || 0])
-      .range([height - marginBottom, marginTop]);
-
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
-
-    svg
-      .append("g")
-      .attr("fill", "steelblue")
-      .selectAll()
-      .data(yearlyData)
-      .join("rect")
-      .attr("x", (d) => xScale(d.categoryId as string)!)
-      .attr("y", (d) => yScale(d.transactions.amount as number))
-      .attr(
-        "height",
-        (d) => yScale(0) - yScale(d.transactions.amount as number)
-      )
-      .attr("width", xScale.bandwidth())
-      .attr("fill", (d) => d.chartColor);
-
-    svg
-      .append("g")
-      .attr("transform", `translate(0,${height - marginBottom})`)
-      .call(d3.axisBottom(xScale).tickSizeOuter(0));
-
-    svg
-      .append("g")
-      .attr("transform", `translate(${marginLeft},0)`)
-      .call(
-        d3
-          .axisLeft(yScale)
-          .ticks(5)
-          .tickFormat((y) => (y as number).toFixed())
-      )
-
-      .call((g) => g.select(".domain").remove())
-      .call((g) =>
-        g
-          .append("text")
-          .attr("x", -marginLeft)
-          .attr("y", 15)
-          .attr("fill", "currentColor")
-          .attr("text-anchor", "start")
-          .text("↑ Amount")
-      );
-  }, [yearlyData.length, categories.length]);
+  const maxValue = d3.max(yearlyData, (e) => e.transactions.amount);
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, maxValue || 0])
+    .range([height - marginBottom, marginTop]);
 
   return (
     <div ref={ref} className="bar-chart">
-      <svg ref={svgRef} width={bounds.width} height={400}>
-        <g className="x-axis" />
-        <g className="y-axis" />
+      <svg width={bounds.width} height={400} viewBox={`0 0 ${width} ${height}`}>
+        {yearlyData.map((data, i) => (
+          <g
+            key={i}
+            transform={`translate(${xScale(data.categoryId)},0)`}
+            style={{ fontSize: "20px" }}
+          >
+            <text
+              x={xScale.bandwidth() / 4}
+              y={height - 5}
+              textAnchor="middle"
+              fill="#f59e0b"
+            >
+              {data.categoryId}
+            </text>
+          </g>
+        ))}
+
+        {yScale.ticks(5).map((max) => (
+          <g
+            transform={`translate(0,${yScale(max)})`}
+            style={{ color: "#f59e0b", fontSize: "22px" }}
+            key={max}
+          >
+            <line
+              x1={marginLeft}
+              x2={width - marginRight}
+              stroke="white"
+              strokeDasharray="1,3"
+            />
+            <text alignmentBaseline="middle" fill="currentColor">
+              {max}
+            </text>
+          </g>
+        ))}
+
+        <g fill="steelblue">
+          {yearlyData.map((data) => (
+            <rect
+              x={xScale(data.categoryId)}
+              y={yScale(data.transactions.amount as number)}
+              height={yScale(0) - yScale(data.transactions.amount as number)}
+              width={xScale.bandwidth() / 2}
+              fill={data.chartColor}
+            />
+          ))}
+        </g>
       </svg>
     </div>
   );
