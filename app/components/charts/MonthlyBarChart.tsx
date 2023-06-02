@@ -2,16 +2,9 @@ import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
-import { format, isSameMonth } from "date-fns";
+import { format } from "date-fns";
 import { barChartConfig } from "@/app/constants/barChartConfig";
-
-interface GroupedTransactionMonthly {
-  month: number;
-  categoryId: string;
-  chartColor: string;
-  transactions: { amount: number; transactionType: string };
-}
+import useGetGroupedData from "@/hooks/useGetGroupedData";
 
 export default function MonthlyBarChart({
   transactions,
@@ -21,47 +14,9 @@ export default function MonthlyBarChart({
   categories: Category[];
 }) {
   let [ref, bounds] = useMeasure();
+  const groupedData = useGetGroupedData(transactions, categories);
 
-  const monthlyData: GroupedTransactionMonthly[] = useMemo(() => {
-    return transactions.reduce(
-      (
-        result: GroupedTransactionMonthly[],
-        transaction: TransactionResponse
-      ) => {
-        const currentCategory = categories?.find(
-          (category) => category.id === transaction.categoryId
-        );
-
-        const existingGroup = result.find(
-          (group) => group.categoryId === currentCategory?.name
-        );
-
-        if (
-          existingGroup &&
-          isSameMonth(
-            new Date(transaction.date.seconds * 1000),
-            new Date(existingGroup.month * 1000)
-          )
-        ) {
-          existingGroup.transactions.amount =
-            existingGroup.transactions.amount + parseInt(transaction.amount);
-        } else {
-          result.push({
-            categoryId: currentCategory?.name!,
-            chartColor: currentCategory?.chartColor!,
-            transactions: {
-              amount: parseInt(transaction.amount),
-              transactionType: transaction.transactionType,
-            },
-            month: transaction.date.seconds,
-          });
-        }
-
-        return result;
-      },
-      []
-    );
-  }, [transactions, categories]);
+  const monthlyData = groupedData;
 
   const width = bounds.width;
   const { height, marginTop, marginBottom, marginLeft, marginRight } =

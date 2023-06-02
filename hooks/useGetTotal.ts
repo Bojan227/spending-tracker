@@ -1,4 +1,4 @@
-import { useTransactionsStore } from "@/store/TransactionsStore";
+import { useTransactionsStore } from "@/store/transactions-store";
 import { useMemo } from "react";
 
 export default function useGetTotal() {

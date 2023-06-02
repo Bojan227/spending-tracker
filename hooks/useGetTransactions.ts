@@ -3,7 +3,7 @@ import { useFilterStore } from "@/store/filter-store";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { filterTransactions } from "@/utils/filterTransactions";
-import { useUserStore } from "@/store";
+import { useUserStore } from "@/store/user-store";
 
 async function getTransactions(
   accountId: string,

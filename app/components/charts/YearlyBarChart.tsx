@@ -2,16 +2,10 @@ import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
 import { barChartConfig } from "@/app/constants/barChartConfig";
 import { format } from "date-fns";
 import { useFilterStore } from "@/store/filter-store";
-
-interface GroupedTransactionYearly {
-  categoryId: string;
-  chartColor: string;
-  transactions: { amount: number; transactionType: string };
-}
+import useGetGroupedData from "@/hooks/useGetGroupedData";
 
 export default function YearlyBarChart({
   transactions,
@@ -22,40 +16,9 @@ export default function YearlyBarChart({
 }) {
   let [ref, bounds] = useMeasure();
   const { dateInSeconds } = useFilterStore();
+  const groupedData = useGetGroupedData(transactions, categories);
 
-  const yearlyData: GroupedTransactionYearly[] = useMemo(() => {
-    return transactions.reduce(
-      (
-        result: GroupedTransactionYearly[],
-        transaction: TransactionResponse
-      ) => {
-        const currentCategory = categories?.find(
-          (category) => category.id === transaction.categoryId
-        );
-
-        const existingGroup = result.find(
-          (group) => group.categoryId === currentCategory?.name
-        );
-
-        if (existingGroup) {
-          existingGroup.transactions.amount =
-            existingGroup.transactions.amount + parseInt(transaction.amount);
-        } else {
-          result.push({
-            categoryId: currentCategory?.name!,
-            chartColor: currentCategory?.chartColor!,
-            transactions: {
-              amount: parseInt(transaction.amount),
-              transactionType: transaction.transactionType,
-            },
-          });
-        }
-
-        return result;
-      },
-      []
-    );
-  }, [transactions, categories]);
+  const yearlyData = groupedData;
 
   const width = bounds.width;
   const { height, marginTop, marginBottom, marginLeft, marginRight } =
