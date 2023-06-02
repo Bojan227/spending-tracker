@@ -2,6 +2,10 @@ import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
+import { barChartConfig } from "@/app/constants/barChartConfig";
+import { format } from "date-fns";
+import { useFilterStore } from "@/store/filter-store";
 
 interface GroupedTransactionYearly {
   categoryId: string;
@@ -17,10 +21,10 @@ export default function YearlyBarChart({
   categories: Category[];
 }) {
   let [ref, bounds] = useMeasure();
+  const { dateInSeconds } = useFilterStore();
 
-  const yearlyData: GroupedTransactionYearly[] = transactions
-    .filter((transaction) => transaction.transactionType === "expense")
-    .reduce(
+  const yearlyData: GroupedTransactionYearly[] = useMemo(() => {
+    return transactions.reduce(
       (
         result: GroupedTransactionYearly[],
         transaction: TransactionResponse
@@ -51,13 +55,11 @@ export default function YearlyBarChart({
       },
       []
     );
+  }, [transactions, categories]);
 
   const width = bounds.width;
-  const height = bounds.height;
-  const marginTop = 30;
-  const marginRight = 20;
-  const marginBottom = 30;
-  const marginLeft = 40;
+  const { height, marginTop, marginBottom, marginLeft, marginRight } =
+    barChartConfig;
 
   const xScale = d3
     .scaleBand()
@@ -73,7 +75,11 @@ export default function YearlyBarChart({
 
   return (
     <div ref={ref} className="bar-chart">
-      <svg width={bounds.width} height={400} viewBox={`0 0 ${width} ${height}`}>
+      <svg
+        width={bounds.width}
+        height={height + 40}
+        viewBox={`0 0 ${width} ${height}`}
+      >
         {yearlyData.map((data, i) => (
           <g
             key={i}
@@ -115,7 +121,7 @@ export default function YearlyBarChart({
               key={i}
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
-              transition={{ duration: 1, delay: 1.2 * i }}
+              transition={{ duration: 1.5, type: "spring" }}
             >
               <motion.rect
                 rx="20"
@@ -128,6 +134,10 @@ export default function YearlyBarChart({
             </motion.g>
           ))}
         </g>
+
+        <text x={width / 2} y={yScale(maxValue as number) - 20} fill="white">
+          {format(new Date(dateInSeconds * 1000), "yyyy")}
+        </text>
       </svg>
     </div>
   );
