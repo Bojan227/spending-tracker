@@ -1,8 +1,8 @@
 "use client";
 
 import useGetTransactions from "@/hooks/useGetTransactions";
-import { useUserStore } from "@/store";
-import { useTransactionsStore } from "@/store/TransactionsStore";
+import { useUserStore } from "@/store/user-store";
+import { useTransactionsStore } from "@/store/transactions-store";
 import { useEffect } from "react";
 
 export function TransactionsProvider({

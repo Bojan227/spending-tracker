@@ -1,7 +1,7 @@
 "use client";
 
 import useGetUsers from "@/hooks/useGetUsers";
-import { useUserStore } from "@/store";
+import { useUserStore } from "@/store/user-store";
 import { useEffect } from "react";
 
 export function CurrentUserProvider({
