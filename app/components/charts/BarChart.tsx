@@ -2,11 +2,11 @@ import useMeasure from "react-use-measure";
 import * as d3 from "d3";
 import { Category, TransactionResponse } from "@/types";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
 import { barChartConfig } from "@/app/constants/barChartConfig";
 import useGetGroupedData from "@/hooks/useGetGroupedData";
+import { useFilterStore } from "@/store/filter-store";
 
-export default function MonthlyBarChart({
+export default function BarChart({
   transactions,
   categories,
 }: {
@@ -14,9 +14,8 @@ export default function MonthlyBarChart({
   categories: Category[];
 }) {
   let [ref, bounds] = useMeasure();
+  const { currentPeriod } = useFilterStore();
   const groupedData = useGetGroupedData(transactions, categories);
-
-  const monthlyData = groupedData;
 
   const width = bounds.width;
   const { height, marginTop, marginBottom, marginLeft, marginRight } =
@@ -24,11 +23,11 @@ export default function MonthlyBarChart({
 
   const xScale = d3
     .scaleBand()
-    .domain(monthlyData.map((d) => d.categoryId as string))
+    .domain(groupedData.map((d) => d.categoryId as string))
     .range([marginLeft, width - marginRight])
     .padding(0.1);
 
-  const maxValue = d3.max(monthlyData, (e) => e.transactions.amount);
+  const maxValue = d3.max(groupedData, (e) => e.transactions.amount);
   const yScale = d3
     .scaleLinear()
     .domain([0, maxValue || 0])
@@ -41,7 +40,7 @@ export default function MonthlyBarChart({
         height={height + 20}
         viewBox={`0 0 ${width} ${height}`}
       >
-        {monthlyData.map((data, i) => (
+        {groupedData.map((data, i) => (
           <g
             key={i}
             transform={`translate(${xScale(data.categoryId)},0)`}
@@ -77,7 +76,7 @@ export default function MonthlyBarChart({
         ))}
 
         <g>
-          {monthlyData.map((data, i) => (
+          {groupedData.map((data, i) => (
             <motion.g
               key={i}
               initial={{ scaleY: 0 }}
@@ -97,8 +96,7 @@ export default function MonthlyBarChart({
         </g>
 
         <text x={width / 2} y={yScale(maxValue as number) - 20} fill="white">
-          {monthlyData[0]?.month &&
-            format(new Date(monthlyData[0]?.month * 1000), "MMMM")}
+          {currentPeriod}
         </text>
       </svg>
     </div>
