@@ -1,9 +1,7 @@
 import { db } from "@/app/firebase";
 import { useFilterStore } from "@/store/filter-store";
-import { TransactionResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { isTransactionIncluded } from "@/utils/isTransactionIncluded";
 import { filterTransactions } from "@/utils/filterTransactions";
 import { useUserStore } from "@/store";
 
@@ -25,7 +23,7 @@ async function getTransactions(
   return filterTransactions(querySnapshot, filterType, date, categoryId);
 }
 
-export default function useGetTransactions(accountId: string) {
+export default function useGetTransactions() {
   const { filterType, dateInSeconds, categoryFilter } = useFilterStore();
   const { currentUser } = useUserStore();
 

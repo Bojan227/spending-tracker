@@ -10,10 +10,8 @@ export function TransactionsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { currentUser } = useUserStore();
   const { loadTransactions } = useTransactionsStore();
-
-  const { data: transactions } = useGetTransactions(currentUser?.id!);
+  const { data: transactions } = useGetTransactions();
 
   useEffect(() => {
     if (transactions) {
