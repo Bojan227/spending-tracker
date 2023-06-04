@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import useGetGroupedData from "@/hooks/useGetGroupedData";
 import { Category, TransactionResponse } from "@/types";
 import { useFilterStore } from "@/store/filter-store";
+import { motion } from "framer-motion";
 
 interface DataItem {
   label: string;
@@ -68,10 +69,25 @@ export default function PieChart({
         >
           <g transform={`translate(${bounds.width / 2}, ${height / 2})`}>
             {pieData.map((data, index) => (
-              <g key={index} className="arc">
-                <path
+              <motion.g
+                key={index}
+                className="arc"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <motion.path
                   d={(d3.arc() as any).innerRadius(0).outerRadius(radius)(data)}
                   fill={colorScale(data.data.chartColor)}
+                  initial={{
+                    d: (d3.arc() as any).innerRadius(0).outerRadius(0)(data),
+                  }}
+                  animate={{
+                    d: (d3.arc() as any).innerRadius(0).outerRadius(radius)(
+                      data
+                    ),
+                  }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 />
                 <text
                   transform={`translate(${calculateCentroid(
@@ -84,7 +100,7 @@ export default function PieChart({
                 >
                   {data.data.label}
                 </text>
-              </g>
+              </motion.g>
             ))}
           </g>
 
