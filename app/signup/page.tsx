@@ -5,28 +5,34 @@ import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import Link from "next/link";
+import useCreateUser from "@/hooks/useCreateUser";
 
 const Signup = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { createUser, isLoading } = useCreateUser();
+  const [error, setError] = useState("");
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
+      .then(async (userCredential) => {
         const user = userCredential.user;
         console.log(user);
+        await createUser({
+          documentId: user.uid,
+          accounts: [],
+        });
+
         router.push("/login");
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        // ..
+
+        setError(errorMessage);
       });
   };
 
@@ -61,6 +67,7 @@ const Signup = () => {
       </form>
 
       <Link href="/login">Already have an account? Sign in</Link>
+      {error && <h1>{error}</h1>}
     </div>
   );
 };
