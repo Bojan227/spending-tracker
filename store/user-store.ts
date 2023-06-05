@@ -1,12 +1,11 @@
 import { create } from "zustand";
-import { UserType } from "@/types";
 
 type UserStore = {
-  currentUser: UserType | undefined;
-  switchUser: (user: UserType | undefined) => void;
+  currentUser: string | undefined;
+  switchUser: (userId: string) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
   currentUser: undefined,
-  switchUser: (user) => set((state) => ({ ...state, currentUser: user })),
+  switchUser: (userId) => set((state) => ({ ...state, currentUser: userId })),
 }));
