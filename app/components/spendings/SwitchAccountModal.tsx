@@ -1,11 +1,6 @@
 import {
-  Box,
   Button,
-  Flex,
-  FormControl,
-  FormLabel,
   Icon,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,37 +10,34 @@ import {
   ModalOverlay,
   Radio,
   RadioGroup,
-  Select,
   Stack,
-  Text,
-  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 
 import React, { useEffect, useState } from "react";
-import { useUserStore } from "@/store";
 import useGetUsers from "@/hooks/useGetUsers";
 
 import { FaUser } from "react-icons/fa";
+import { useAccountStore } from "@/store/account-store";
 
 export default function SwitchAccount({ iconColor }: { iconColor: string }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
 
-  const { currentUser, switchUser } = useUserStore();
+  const { currentAccount, switchAccount } = useAccountStore();
   const { data: users, isLoading, isError, error } = useGetUsers();
 
   const [value, setValue] = useState("");
 
   useEffect(() => {
-    if (currentUser?.id) {
-      setValue(currentUser.id);
+    if (currentAccount?.id) {
+      setValue(currentAccount.id);
     }
-  }, [currentUser?.id]);
+  }, [currentAccount?.id]);
 
   const handleSwitch = (value: string) => {
     const user = users?.find((user) => user.id === value);
-    switchUser(user);
+    switchAccount(user);
     setValue(user?.id!);
   };
 

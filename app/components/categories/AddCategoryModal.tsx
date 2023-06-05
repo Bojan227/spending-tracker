@@ -15,11 +15,11 @@ import {
 } from "@chakra-ui/react";
 
 import useAddCategory from "@/hooks/useAddCategory";
-import { useUserStore } from "@/store";
 
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
+import { useAccountStore } from "@/store/account-store";
 
 export default function AddCategory({
   currentTransaction,
@@ -32,7 +32,7 @@ export default function AddCategory({
   const [chartColor, setChartColor] = useState("");
 
   const { addMutation } = useAddCategory();
-  const { currentUser } = useUserStore();
+  const { currentAccount } = useAccountStore();
 
   return (
     <>
@@ -71,7 +71,7 @@ export default function AddCategory({
                 addMutation.mutate({
                   name: categoryName,
                   chartColor,
-                  userId: currentUser?.id!,
+                  userId: currentAccount?.id!,
                   type: currentTransaction,
                 })
               }

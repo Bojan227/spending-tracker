@@ -23,17 +23,17 @@ import {
 } from "@chakra-ui/react";
 
 import React, { useEffect, useState } from "react";
-import { useUserStore } from "@/store";
 
 import { FaFilter } from "react-icons/fa";
 import useGetCategories from "@/hooks/useGetCategories";
 import { useFilterStore } from "@/store/filter-store";
+import { useAccountStore } from "@/store/account-store";
 
 export default function FilterCategory() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
 
-  const { currentUser } = useUserStore();
+  const { currentAccount } = useAccountStore();
   const { categoryFilter, setCategoryFilter } = useFilterStore();
 
   const {
@@ -41,7 +41,7 @@ export default function FilterCategory() {
     isLoading,
     isError,
     error,
-  } = useGetCategories(currentUser?.id!, "all");
+  } = useGetCategories(currentAccount?.id!, "all");
 
   return (
     <>

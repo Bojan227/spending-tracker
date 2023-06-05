@@ -1,7 +1,7 @@
 "use client";
 
 import useGetCategories from "@/hooks/useGetCategories";
-import { useUserStore } from "@/store";
+import { useAccountStore } from "@/store/account-store";
 import { Flex, Select, Text } from "@chakra-ui/react";
 
 export default function CategoriesSelect({
@@ -13,15 +13,15 @@ export default function CategoriesSelect({
   setCategoryId: React.Dispatch<React.SetStateAction<string>>;
   currentTransaction: boolean;
 }) {
-  const { currentUser } = useUserStore();
+  const { currentAccount } = useAccountStore();
 
   const {
-    isLoading: isLoadingCategories,
-    isError: isErrorCategories,
-    error: errorCategories,
+    isLoading,
+    isError,
+    error,
     data: categories,
   } = useGetCategories(
-    currentUser?.id!,
+    currentAccount?.id!,
     currentTransaction ? "expense" : "income"
   );
 

@@ -4,14 +4,13 @@ import { useState } from "react";
 import CategoryField from "../components/categories/CategoryField";
 import CategoryCard from "../components/categories/Card";
 
-import { FaUser } from "react-icons/fa";
 import AddCategory from "../components/categories/AddCategoryModal";
 import useGetCategories from "@/hooks/useGetCategories";
-import { useUserStore } from "@/store";
+import { useAccountStore } from "@/store/account-store";
 
 export default function Categories() {
   const [currentTransaction, setTransaction] = useState(true);
-  const { currentUser } = useUserStore();
+  const { currentAccount } = useAccountStore();
 
   const {
     isLoading,
@@ -19,7 +18,7 @@ export default function Categories() {
     error,
     data: categories,
   } = useGetCategories(
-    currentUser?.id!,
+    currentAccount?.id!,
     currentTransaction ? "expense" : "income"
   );
 
