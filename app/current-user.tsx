@@ -1,6 +1,7 @@
 "use client";
 
-import useGetUsers from "@/hooks/useGetUsers";
+import useGetUserById from "@/hooks/getUserById";
+import { useAccountStore } from "@/store/account-store";
 import { useUserStore } from "@/store/user-store";
 import { useEffect } from "react";
 
@@ -9,14 +10,16 @@ export function CurrentUserProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: users } = useGetUsers();
-  const { currentUser, switchUser } = useUserStore();
+  const { currentUser } = useUserStore();
+  const { switchAccount, loadAccounts } = useAccountStore();
+  const { data: user } = useGetUserById(currentUser!);
 
   useEffect(() => {
-    if (!currentUser && users) {
-      switchUser(users[0]);
+    if (user) {
+      switchAccount(user.accounts[0] || undefined);
+      loadAccounts(user.accounts);
     }
-  }, [users]);
+  }, [user, currentUser]);
 
   return <>{children}</>;
 }
