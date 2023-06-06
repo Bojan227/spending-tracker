@@ -14,7 +14,7 @@ export default function InfoBox({
   width?: string;
   flex?: number;
 }) {
-  const total = useGetTotal();
+  const { total } = useGetTotal();
 
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",

@@ -15,8 +15,6 @@ import {
 } from "@chakra-ui/react";
 
 import React, { useEffect, useState } from "react";
-import useGetUsers from "@/hooks/useGetUsers";
-
 import { FaUser } from "react-icons/fa";
 import { useAccountStore } from "@/store/account-store";
 
@@ -24,8 +22,7 @@ export default function SwitchAccount({ iconColor }: { iconColor: string }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
 
-  const { currentAccount, switchAccount } = useAccountStore();
-  const { data: users, isLoading, isError, error } = useGetUsers();
+  const { currentAccount, switchAccount, accounts } = useAccountStore();
 
   const [value, setValue] = useState("");
 
@@ -36,9 +33,9 @@ export default function SwitchAccount({ iconColor }: { iconColor: string }) {
   }, [currentAccount?.id]);
 
   const handleSwitch = (value: string) => {
-    const user = users?.find((user) => user.id === value);
-    switchAccount(user);
-    setValue(user?.id!);
+    const account = accounts?.find((account) => account.id === value);
+    switchAccount(account);
+    setValue(account?.id!);
   };
 
   return (
@@ -64,7 +61,7 @@ export default function SwitchAccount({ iconColor }: { iconColor: string }) {
           <ModalBody>
             <RadioGroup onClick={onClose} onChange={handleSwitch} value={value}>
               <Stack direction="column">
-                {users?.map((user) => (
+                {accounts?.map((user) => (
                   <Radio key={user.id} value={user.id}>
                     {user.userName}
                   </Radio>
