@@ -1,13 +1,20 @@
 import { db } from "@/app/firebase";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, arrayRemove } from "firebase/firestore";
 import { queryClient } from "../app/constants/queryClient";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@chakra-ui/react";
+import { useUserStore } from "@/store/user-store";
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (userId: string, accountId: string) => {
   const userRef = doc(db, "users", userId);
+  const accountRef = doc(db, "accounts", accountId);
+  console.log(userId, accountId);
   try {
-    await deleteDoc(userRef);
+    await updateDoc(userRef, {
+      accounts: arrayRemove(accountId),
+    });
+
+    await deleteDoc(accountRef);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
@@ -17,10 +24,11 @@ export const deleteUser = async (userId: string) => {
 
 export default function useDeleteUser() {
   const toast = useToast();
+  const { currentUser } = useUserStore();
 
   const mutation = useMutation({
-    mutationFn: async (userId: string) => {
-      return deleteUser(userId);
+    mutationFn: async (accountId: string) => {
+      return deleteUser(currentUser!, accountId);
     },
     onError: (error, variables, context) => {
       // An error happened!
@@ -33,7 +41,7 @@ export default function useDeleteUser() {
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
       toast({
         title: "User deleted successfully.",
         status: "success",
