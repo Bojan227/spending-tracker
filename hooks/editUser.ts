@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { UserType } from "@/types";
 
 export const editUserById = async (
-  userId: string,
+  accountId: string,
   updatedData: Omit<UserType, "id">
 ) => {
-  const userRef = doc(db, "users", userId);
+  const userRef = doc(db, "accounts", accountId);
 
   try {
     await updateDoc(userRef, updatedData);
@@ -24,15 +24,17 @@ export default function useEditUserInfo() {
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: async (user: UserType) => {
-      return editUserById(user.id!, {
-        userName: user.userName,
-        color: user.color,
+    mutationFn: async (account: UserType) => {
+      return editUserById(account.id!, {
+        userName: account.userName,
+        color: account.color,
       });
     },
     onSuccess: (data, variables, context) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["users", variables.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["accounts", variables.id],
+      });
       router.back();
     },
   });

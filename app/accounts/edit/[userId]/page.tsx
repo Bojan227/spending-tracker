@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { Spinner } from "@chakra-ui/react";
 import useEditUserInfo from "@/hooks/editUser";
-import useGetUserById from "@/hooks/getUserById";
+import useGetAccountById from "@/hooks/useGetAccountById";
 
 export default function EditUser() {
   const pathname = usePathname();
 
   const { editMutation } = useEditUserInfo();
 
-  const { isLoading, isError, data, error } = useGetUserById(
+  const { isLoading, error, isError, data } = useGetAccountById(
     pathname.split("/")[3]
   );
 
@@ -22,8 +22,8 @@ export default function EditUser() {
 
   useEffect(() => {
     if (data) {
-      setColor(data.color);
-      setUsername(data.userName);
+      setColor(data?.color);
+      setUsername(data?.userName);
     }
   }, [data?.color]);
 
