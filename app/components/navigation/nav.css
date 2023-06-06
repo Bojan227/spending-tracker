@@ -1,10 +1,16 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #44403c;
+}
 .main-navigation {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 25px;
   padding: 20px;
-  background-color: #44403c;
+  flex: 1;
 }
 
 li {

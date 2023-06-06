@@ -1,15 +1,36 @@
 "use client";
+
 import "./nav.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Flex } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
 import { FaDollarSign, FaStickyNote, FaBoxes, FaUsers } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
+import { signOut } from "firebase/auth";
+import { auth } from "@/app/firebase";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/user-store";
 
 export default function Nav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { currentUser, switchUser } = useUserStore();
 
-  return (
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        router.push("/login");
+        switchUser(undefined);
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  return currentUser ? (
     <nav>
       <ul className="main-navigation">
         <li>
@@ -54,6 +75,15 @@ export default function Nav() {
           </Flex>
         </li>
       </ul>
+      <Icon
+        onClick={handleLogout}
+        cursor="pointer"
+        as={FaArrowRight}
+        w={8}
+        h={8}
+        color="#f59e0b"
+        marginRight={6}
+      />
     </nav>
-  );
+  ) : null;
 }

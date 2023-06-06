@@ -22,6 +22,7 @@ export default function AuthProvider({
         const uid = user.uid;
         // ...
         switchUser(uid);
+        router.push("/");
       } else {
         // User is signed out
         // ...
