@@ -5,8 +5,13 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button, Text } from "@chakra-ui/react";
+import { googleSignin } from "@/utils/googleSignin";
+import GoogleButton from "../components/GoogleButton";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,18 +19,19 @@ const Login = () => {
 
   const onLogin = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         router.push("/");
-        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+        setError(errorMessage);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -54,11 +60,14 @@ const Login = () => {
         </div>
 
         <button type="submit" onClick={onLogin}>
-          Login
+          {isLoading ? "Loading..." : "Login"}
         </button>
       </form>
 
       <Link href="/signup">New user? Sign up here</Link>
+      {/* <Button onClick={googleSignin}>Sign in with Google</Button> */}
+      <GoogleButton />
+      {error && <Text>{error}</Text>}
     </div>
   );
 };
