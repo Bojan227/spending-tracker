@@ -19,14 +19,14 @@ import {
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { FaPlus } from "react-icons/fa";
-import useAddUser from "@/hooks/useAddUser";
+import useAddAccount from "@/hooks/useAddAccount";
 
 export default function AddUserModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userName, setUsername] = useState("");
   const [color, setColor] = useState("#000000");
 
-  const { addMutation } = useAddUser();
+  const { addMutation } = useAddAccount();
 
   return (
     <>
