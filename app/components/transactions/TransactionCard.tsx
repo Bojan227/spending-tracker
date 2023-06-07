@@ -42,6 +42,7 @@ export default function TransactionCard({
         overflow="hidden"
         variant="outline"
         px={4}
+        mt={4}
         backgroundColor="#44403c"
         color="#f1f5f9"
         cursor="pointer"

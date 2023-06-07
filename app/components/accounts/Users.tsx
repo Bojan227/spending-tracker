@@ -1,18 +1,28 @@
 "use client";
 
 import AccountCard from "./Card";
-import { Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import useGetAccounts from "@/hooks/useGetAccounts";
 
 export function Users() {
   const { isLoading, isError, error, data: accounts } = useGetAccounts();
 
-  console.log(accounts);
   return (
-    <Flex w="100%" align="center" direction="column" flex="1" gap="8px">
+    <Box
+      width="55%"
+      justifyItems="center"
+      alignItems="center"
+      flexDirection="column"
+      maxHeight="500px"
+      overflowY="auto"
+      scrollBehavior="smooth"
+      mt={6}
+      p={4}
+      flex={1}
+    >
       {accounts?.map(({ id, userName, color }) => (
         <AccountCard key={id} {...{ id, userName, color }} />
       ))}
-    </Flex>
+    </Box>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { Container, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Spinner, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import CategoryField from "../components/categories/CategoryField";
 import CategoryCard from "../components/categories/Card";
@@ -23,7 +23,7 @@ export default function Categories() {
   );
 
   return (
-    <Container minH="100vh">
+    <Container minH="100vh" overflow="hidden">
       <Flex justify="center" align="center" p={4}>
         <Flex flex="1">
           <CategoryField
@@ -40,18 +40,30 @@ export default function Categories() {
           }}
         />
       </Flex>
-      {isLoading ? (
-        <Spinner size="md" />
-      ) : (
-        categories?.map(({ id, chartColor, name, type, userId }) => (
-          <CategoryCard
-            key={id}
-            categoryId={id}
-            label={name}
-            chartColor={chartColor}
-          />
-        ))
-      )}
+      <Box
+        width="100%"
+        justifyItems="center"
+        alignItems="center"
+        flexDirection="column"
+        maxHeight="550px"
+        overflowY="auto"
+        scrollBehavior="smooth"
+        mt={6}
+        p={4}
+      >
+        {isLoading ? (
+          <Spinner size="md" />
+        ) : (
+          categories?.map(({ id, chartColor, name, type, userId }) => (
+            <CategoryCard
+              key={id}
+              categoryId={id}
+              label={name}
+              chartColor={chartColor}
+            />
+          ))
+        )}
+      </Box>
       {isError && <Text>{error instanceof Error && error.message}</Text>}
     </Container>
   );

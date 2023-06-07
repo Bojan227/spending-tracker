@@ -24,6 +24,7 @@ export default function AccountCard({ id, userName, color }: UserType) {
         overflow="hidden"
         variant="outline"
         p={2}
+        mt={4}
         backgroundColor="#44403c"
         color="#f1f5f9"
         cursor="pointer"

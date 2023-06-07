@@ -1,17 +1,22 @@
 "use client";
 
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import AddTranstaction from "../components/transactions/AddTransaction";
 import { FaPlus } from "react-icons/fa";
 import TransactionCard from "../components/transactions/TransactionCard";
 import SpendingFilter from "../components/SpendingFilter";
 import TransactionsFooter from "../components/transactions/TransactionsFooter";
-import { useTransactionsStore } from "@/store/TransactionsStore";
+import { useTransactionsStore } from "@/store/transactions-store";
 import useGetTotal from "@/hooks/useGetTotal";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PdfDoc } from "../components/PdfDoc";
+import { useFilterStore } from "@/store/filter-store";
 
 export default function Transactions() {
   const { transactions } = useTransactionsStore();
   const { total } = useGetTotal();
+
+  const { currentPeriod } = useFilterStore();
 
   return (
     <Flex direction="column" align="center" width="100%" minH="100vh" gap={4}>
@@ -36,12 +41,16 @@ export default function Transactions() {
           <SpendingFilter />
           <AddTranstaction transaction={true} />
         </Flex>
-        <Flex
-          width="100%"
-          justify="center"
-          align="center"
-          gap="5px"
-          direction="column"
+        <Box
+          width="65%"
+          justifyItems="center"
+          alignItems="center"
+          flexDirection="column"
+          maxHeight="550px"
+          overflowY="auto"
+          scrollBehavior="smooth"
+          mt={6}
+          p={4}
         >
           {transactions?.length! > 0 ? (
             transactions?.map((transaction, i) => (
@@ -65,8 +74,9 @@ export default function Transactions() {
               Press the '+' icon to add your first transaction
             </Text>
           )}
-        </Flex>
+        </Box>
       </Flex>
+
       <TransactionsFooter />
     </Flex>
   );
