@@ -17,10 +17,13 @@ import { useFilterStore } from "@/store/filter-store";
 
 export default function SpendingFilter() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { setDateInSeconds, currentPeriod, setPeriod } = useFilterStore();
-  const [value, setValue] = useState<"monthly" | "daily" | "weekly" | "yearly">(
-    "monthly"
-  );
+  const {
+    setDateInSeconds,
+    currentPeriod,
+    setPeriod,
+    filterType,
+    setFilterType,
+  } = useFilterStore();
 
   return (
     <>
@@ -46,12 +49,13 @@ export default function SpendingFilter() {
                   | "daily"
                   | "weekly"
                   | "yearly";
-                setValue(period);
+
+                setFilterType(period);
                 setPeriod(period, new Date().getTime() / 1000);
                 setDateInSeconds(new Date().getTime() / 1000);
                 onClose();
               }}
-              value={value}
+              value={filterType}
             >
               <Stack direction="column">
                 <Radio value="daily">Daily</Radio>

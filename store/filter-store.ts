@@ -12,7 +12,10 @@ type FilterStore = {
     seconds: number
   ) => void;
   setDateInSeconds: (seconds: number) => void;
-  setCategoryFilter: (filterType: string) => void;
+  setFilterType: (
+    filterType: "monthly" | "daily" | "weekly" | "yearly"
+  ) => void;
+  setCategoryFilter: (categoryFilter: string) => void;
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
@@ -29,6 +32,8 @@ export const useFilterStore = create<FilterStore>((set) => ({
       filterType: period,
     })),
 
-  setCategoryFilter: (filterType) =>
-    set((state) => ({ ...state, categoryFilter: filterType })),
+  setCategoryFilter: (categoryFilter) =>
+    set((state) => ({ ...state, categoryFilter: categoryFilter })),
+  setFilterType: (filterType) =>
+    set((state) => ({ ...state, filterType: filterType })),
 }));

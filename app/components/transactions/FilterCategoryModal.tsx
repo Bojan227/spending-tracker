@@ -43,6 +43,8 @@ export default function FilterCategory() {
     error,
   } = useGetCategories(currentAccount?.id!, "all");
 
+  console.log(categoryFilter);
+
   return (
     <>
       <Icon onClick={onOpen} as={FaFilter} color="#f59e0b" w={6} h={6} />
