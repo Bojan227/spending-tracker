@@ -1,11 +1,6 @@
 import {
-  Box,
   Button,
-  Flex,
-  FormControl,
-  FormLabel,
   Icon,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,14 +10,11 @@ import {
   ModalOverlay,
   Radio,
   RadioGroup,
-  Select,
   Stack,
-  Text,
-  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { FaFilter } from "react-icons/fa";
 import useGetCategories from "@/hooks/useGetCategories";
@@ -42,8 +34,6 @@ export default function FilterCategory() {
     isError,
     error,
   } = useGetCategories(currentAccount?.id!, "all");
-
-  console.log(categoryFilter);
 
   return (
     <>

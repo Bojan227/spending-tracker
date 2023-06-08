@@ -60,7 +60,7 @@ export default function ExportModal() {
           <ModalCloseButton />
           <ModalBody>
             <Flex direction="column" gap={6}>
-              <PDFDownloadLink
+              {/* <PDFDownloadLink
                 document={
                   <PdfDoc
                     transactions={filteredTransactions!}
@@ -71,7 +71,7 @@ export default function ExportModal() {
                 fileName={"transaction-overview"}
               >
                 <button>PDF</button>
-              </PDFDownloadLink>
+              </PDFDownloadLink> */}
               <CsvDoc
                 transactions={filteredTransactions!}
                 currentPeriod={currentPeriod}

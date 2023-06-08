@@ -10,12 +10,7 @@ export default function SelectTransactionType({
   setTransactionType: React.Dispatch<SetStateAction<string>>;
 }) {
   return (
-    <Flex
-      alignSelf="flex-start"
-      border="1px solid whitesmoke"
-      borderRadius={5}
-      cursor="pointer"
-    >
+    <Flex border="1px solid whitesmoke" borderRadius={5} cursor="pointer">
       <Icon
         backgroundColor={transactionType === "expense" ? "teal.500" : "inherit"}
         onClick={() => setTransactionType("expense")}
