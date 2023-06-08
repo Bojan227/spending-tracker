@@ -48,10 +48,10 @@ export default function PieChart({
     <g
       key={index}
       className="legend-item"
-      transform={`translate(0, ${index * 40})`}
+      transform={`translate(${index * 100}, 0)`}
     >
       <rect width={10} height={10} fill={colorScale(index.toString())} />
-      <text x={15} y={9} fill="white" fontSize="25px">
+      <text x={15} y={14} fill="white" fontSize="25px">
         ${data.amount}
       </text>
     </g>
@@ -104,16 +104,9 @@ export default function PieChart({
             ))}
           </g>
 
-          <g
-            className="legend"
-            transform={`translate(${bounds.width - 350}, 40)`}
-          >
+          <g className="legend" transform={`translate(${0}, ${height + 20})`}>
             {legendItems}
           </g>
-
-          <text x={bounds.width / 4} y={height / 2} fill="white">
-            {currentPeriod}
-          </text>
         </svg>
       )}
     </div>

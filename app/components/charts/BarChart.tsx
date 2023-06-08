@@ -36,9 +36,10 @@ export default function BarChart({
   return (
     <div ref={ref} className="bar-chart">
       <svg
+        id="chartSvg"
         width={bounds.width}
         height={height + 20}
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 0 ${bounds.width} ${height}`}
       >
         {groupedData.map((data, i) => (
           <g
@@ -95,7 +96,11 @@ export default function BarChart({
           ))}
         </g>
 
-        <text x={width / 2} y={yScale(maxValue as number) - 20} fill="white">
+        <text
+          x={width / 2}
+          y={yScale(maxValue as number) - 20 || height}
+          fill="white"
+        >
           {currentPeriod}
         </text>
       </svg>
