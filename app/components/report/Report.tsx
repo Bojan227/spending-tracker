@@ -61,7 +61,10 @@ export default function ReportPage() {
           <Text>Period: {currentPeriod}</Text>
         </Flex>
 
-        <ReportTable transactions={filteredTransactions} />
+        <ReportTable
+          transactions={filteredTransactions}
+          categories={categories}
+        />
 
         <Divider />
         <BarChart transactions={filteredTransactions} categories={categories} />
