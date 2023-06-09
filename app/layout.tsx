@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import Nav from "./components/navigation";
 import { CurrentUserProvider } from "./current-user";
 import { TransactionsProvider } from "./transactions-provider";
+import AuthProvider from "./auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,12 +23,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <CurrentUserProvider>
-            <TransactionsProvider>
-              <Nav />
-              {children}
-            </TransactionsProvider>
-          </CurrentUserProvider>
+          <AuthProvider>
+            <CurrentUserProvider>
+              <TransactionsProvider>
+                <Nav />
+                {children}
+              </TransactionsProvider>
+            </CurrentUserProvider>
+          </AuthProvider>
         </Providers>
       </body>
     </html>
