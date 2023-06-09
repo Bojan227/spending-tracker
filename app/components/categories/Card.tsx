@@ -20,13 +20,14 @@ export default function CategoryCard({
   const { deleteMutation } = useDeleteCategory();
 
   return (
-    <Link href={`/categories/edit/${categoryId}`} style={{ width: "50%" }}>
+    <Link href={`/categories/edit/${categoryId}`} style={{ width: "100%" }}>
       <Card
         align="center"
         direction={{ base: "column", sm: "row" }}
         overflow="hidden"
         variant="outline"
         p={2}
+        mt={4}
         backgroundColor="#44403c"
         color="#f1f5f9"
         cursor="pointer"

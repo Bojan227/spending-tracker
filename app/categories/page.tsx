@@ -24,7 +24,13 @@ export default function Categories() {
 
   return (
     <Container minH="100vh" overflow="hidden">
-      <Flex justify="center" align="center" p={4}>
+      <Flex
+        justify="center"
+        align="center"
+        p={4}
+        gap={6}
+        direction={{ base: "column", sm: "row" }}
+      >
         <Flex flex="1">
           <CategoryField
             {...{ currentTransaction, setTransaction, label: "EXPENSE" }}
