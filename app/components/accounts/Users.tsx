@@ -9,7 +9,7 @@ export function Users() {
 
   return (
     <Box
-      width="55%"
+      width="100%"
       justifyItems="center"
       alignItems="center"
       flexDirection="column"
