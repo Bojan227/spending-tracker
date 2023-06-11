@@ -25,7 +25,11 @@ export default function InfoBox({
   const isNegative = total.income - total.expense < 0 ? true : false;
 
   return (
-    <Flex flex={flex} w={width} justify="space-between">
+    <Flex
+      flex={flex}
+      w={label === "Balance" ? ["100%", "85%", "55%", "35%"] : width}
+      justify="space-between"
+    >
       <Text color="white">{label}</Text>
       <Text color={color}>
         {label === "Balance" && (isZero ? null : isNegative ? "-" : "+")}

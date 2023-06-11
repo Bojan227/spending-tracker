@@ -45,7 +45,7 @@ export default function SummarySection() {
 
   return (
     <>
-      <Box w="50%">
+      <Box w={["100%", "85%", "55%", "35%"]}>
         <Progress
           colorScheme="green"
           size="lg"
@@ -58,7 +58,7 @@ export default function SummarySection() {
         />
         <InfoBox label="Income" value={total.income} color="green" />
       </Box>
-      <Box w="50%" borderBottom="1px dashed white">
+      <Box w={["100%", "85%", "55%", "35%"]} borderBottom="1px dashed white">
         <InfoBox label="Expense" value={total.expense} color="red" />
         <Flex direction="column" py={4} pl={6} fontSize="1.2rem">
           {Object.keys(expensesTotal).map((key) => (

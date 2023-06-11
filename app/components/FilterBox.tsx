@@ -6,7 +6,12 @@ import SwitchAccount from "./spendings/SwitchAccountModal";
 
 export default function FilterBox() {
   return (
-    <Flex align="center" pb={6} justify="space-around" w="50%">
+    <Flex
+      align="center"
+      pb={6}
+      justify="space-between"
+      w={["100%", "85%", "55%", "35%"]}
+    >
       <SpendingFilter />
       <SwitchAccount iconColor="skyblue" />
     </Flex>

@@ -50,7 +50,13 @@ export default function AddTranstaction({
   return (
     <>
       {isSpendingsScreen ? (
-        <Text onClick={onOpen} cursor="pointer" px={2} border="1px solid white">
+        <Text
+          onClick={onOpen}
+          cursor="pointer"
+          textAlign="center"
+          px={2}
+          border="1px solid white"
+        >
           + {transaction ? "Expense" : "Income"}
         </Text>
       ) : (

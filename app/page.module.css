@@ -25,7 +25,8 @@
   align-items: center;
   flex-direction: column;
   font-family: "EraserDust";
-  padding: 6rem;
+  gap: 10px;
+  padding: 2rem;
 }
 
 .description a {
